@@ -1,0 +1,141 @@
+:root {
+    --rosa-claro: #f9e0e9;
+    --rosa-destaque: #f48fb1;
+    --branco: #ffffff;
+    --cinza: #555;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--rosa-claro);
+    color: var(--cinza);
+}
+
+header {
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+header h1 {
+    margin: 0;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    height: 3px;
+    width: 25px;
+    background: var(--branco);
+    margin: 4px 0;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: var(--branco);
+    text-decoration: none;
+}
+
+.container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+label, select, input[type=checkbox] {
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.btn {
+    background-color: var(--rosa-destaque);
+    color: white;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+    nav {
+    display: none;
+    flex-direction: column;
+    background: var(--rosa-destaque);
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    }
+
+    nav.active {
+    display: flex;
+    }
+
+    .menu-toggle {
+    display: flex;
+    }
+}
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card-option {
+    background: var(--branco);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 0.5rem;
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.card-option:hover {
+    border-color: var(--rosa-destaque);
+}
+
+.card-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card-option img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+
+.card-option input:checked + img,
+.card-option input:checked ~ img {
+    border: 2px solid var(--rosa-destaque);
+}
+
+.card-option input:checked + img + span,
+.card-option input:checked ~ span {
+    font-weight: bold;
+    color: var(--rosa-destaque);
+}
