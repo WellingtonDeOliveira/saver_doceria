@@ -134,8 +134,14 @@ label, select, input[type=checkbox] {
     border: 2px solid var(--rosa-destaque);
 }
 
+.card-option:has(input:checked) {
+    border: 2px solid var(--rosa-destaque);
+    border-radius: 10px;
+}
+
 .card-option input:checked + img + span,
 .card-option input:checked ~ span {
     font-weight: bold;
     color: var(--rosa-destaque);
+    border-color: var(--rosa-destaque);
 }
