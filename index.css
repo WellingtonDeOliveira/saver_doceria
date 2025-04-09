@@ -5,6 +5,18 @@
     --cinza: #555;
 }
 
+.logo {
+    height: 70px;
+    width: 70px;
+    margin-right: 20px;
+    border-radius: 35px;
+}
+
+.logoSpace {
+    display: flex;
+    align-items: center;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -18,7 +30,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 10px;
 }
 
 header h1 {
