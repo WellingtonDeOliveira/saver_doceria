@@ -5,21 +5,14 @@
     --cinza: #555;
 }
 
-.logo {
-    height: 70px;
-    width: 70px;
-    margin-right: 20px;
-    border-radius: 35px;
-}
-
-.logoSpace {
-    display: flex;
-    align-items: center;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: var(--rosa-claro);
     color: var(--cinza);
 }
@@ -27,133 +20,209 @@ body {
 header {
     background-color: var(--rosa-destaque);
     color: var(--branco);
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
 }
 
-header h1 {
-    margin: 0;
+.logoSpace {
+    display: flex;
+    align-items: center;
 }
 
-.menu-toggle {
-    display: none;
-    flex-direction: column;
+.logo {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.carrinho-info {
     cursor: pointer;
-}
-
-.menu-toggle span {
-    height: 3px;
-    width: 25px;
+    font-size: 1.2rem;
     background: var(--branco);
-    margin: 4px 0;
+    color: var(--rosa-destaque);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
-nav {
-    display: flex;
-    gap: 1rem;
-}
-
-nav a {
-    color: var(--branco);
-    text-decoration: none;
-}
-
-.container {
-    padding: 2rem;
-    max-width: 800px;
-    margin: auto;
-}
-
-section {
-    margin-bottom: 2rem;
-}
-
-label, select, input[type=checkbox] {
-    display: block;
-    margin: 0.5rem 0;
-}
-
-.btn {
-    background-color: var(--rosa-destaque);
-    color: white;
-    padding: 1rem;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 1rem;
-}
-
-@media (max-width: 600px) {
-    nav {
-    display: none;
-    flex-direction: column;
-    background: var(--rosa-destaque);
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
-    }
-
-    nav.active {
-    display: flex;
-    }
-
-    .menu-toggle {
-    display: flex;
-    }
-}
-
-.card-grid {
+main.produtos-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
+    padding: 2rem;
+    justify-content: center;
 }
 
-.card-option {
-    background: var(--branco);
-    border: 2px solid transparent;
-    border-radius: 10px;
-    padding: 0.5rem;
-    width: 120px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    position: relative;
+.produto-card {
+    display: flex;
+    flex: 1 1 45%;
+    max-width: 45%;
+    background-color: var(--branco);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
 }
 
-.card-option:hover {
-    border-color: var(--rosa-destaque);
+@media (max-width: 768px) {
+    .produto-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
 }
 
-.card-option input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
+.produto-card:hover {
+    transform: scale(1.01);
 }
 
-.card-option img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+.produto-card img {
+  width: 130px;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+}   
+
+.produto-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.produto-info h2 {
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    border-radius: 8px;
 }
 
-.card-option input:checked + img,
-.card-option input:checked ~ img {
-    border: 2px solid var(--rosa-destaque);
+.produto-detalhes {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
 }
 
-.card-option:has(input:checked) {
-    border: 2px solid var(--rosa-destaque);
-    border-radius: 10px;
+.produto-detalhes p {
+    font-size: 0.95rem;
+    color: var(--cinza);
+    max-width: 70%;
 }
 
-.card-option input:checked + img + span,
-.card-option input:checked ~ span {
+.produto-detalhes .preco {
+    font-size: 1rem;
     font-weight: bold;
     color: var(--rosa-destaque);
-    border-color: var(--rosa-destaque);
+    white-space: nowrap;
+}
+
+.produto-card button {
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.produto-card button:hover {
+    background-color: #ec799e;
+}
+
+/* Carrinho (opcional) */
+.modal {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--branco);
+    padding: 1.5rem;
+    border: 2px solid var(--rosa-destaque);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    z-index: 1000;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+    margin-bottom: 1rem;
+    color: var(--rosa-destaque);
+}
+
+.modal ul {
+    list-style: none;
+    margin-bottom: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.modal ul li {
+    margin-bottom: 0.5rem;
+}
+
+.modal button {
+    padding: 0.6rem 1rem;
+    margin: 0.25rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal button:first-of-type {
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
+}
+
+.modal button:last-of-type {
+    background-color: var(--rosa-claro);
+    color: var(--cinza);
+}
+
+.hidden {
+    display: none;
+}
+
+.filtros-categorias {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 2rem;
+}
+
+.filtros-categorias button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--rosa-claro);
+    color: var(--cinza);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filtros-categorias button:hover,
+.filtros-categorias button.ativo {
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
+}
+
+#lista-carrinho button {
+    background-color: var(--rosa-claro);
+    border: none;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#lista-carrinho button:hover {
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
 }

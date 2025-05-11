@@ -1,144 +1,40 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="index.css" />
-  <title>Saver Doceria</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="index.css" />
+  <title>Saver Doces e Salgados</title>
 </head>
 <body>
   <header>
     <div class="logoSpace">
-      <img class="logo" src="assets/logo/69b5ce3f-6444-405e-9c77-e3c6a62a3ede.png" alt="Ovo 350g">
-      <h1>Saver Doceria</h1>
+      <img class="logo" src="assets/logo/69b5ce3f-6444-405e-9c77-e3c6a62a3ede.png" alt="Logo">
+      <h1>Saver</h1>
     </div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="carrinho-info" onclick="abrirCarrinho()">🛒 Carrinho (<span id="quantidade-carrinho">0</span>)</div>
   </header>
 
-  <div class="container">
-    <form id="pedidoForm">
-      <section>
-        <h2>Opção de Ovo de Colher</h2>
-        <div class="card-grid">
-          <label class="card-option">
-            <input type="radio" name="tipo_ovo" value="350g" checked>
-            <img src="assets/tipos/350g.jpg" alt="Ovo 350g">
-            <span>Ovo de 350g</span><br>
-            <span>R$ 50,00</span>
-          </label>
-          <label class="card-option">
-            <input type="radio" name="tipo_ovo" value="2x100">
-            <img src="assets/tipos/100g.jpg" alt="2 unidades de 100g">
-            </br>
-            <span>2 Uni de 100g</span>
-            <br>
-            <span>R$ 35,00</span>
-          </label>
-        </div>
-      </section>      
+  <div class="filtros-categorias">
+    <button onclick="filtrarProdutos('todos')" class="ativo">Todos</button>
+    <button onclick="filtrarProdutos('doce')">Doces</button>
+    <button onclick="filtrarProdutos('salgado')">Salgados</button>
+    <button onclick="filtrarProdutos('bebida')">Bebidas</button>
+  </div>  
 
-      <div id="ovoPrincipal">
-        <section>
-          <h2>1. Escolha a Casca</h2>
-          <div class="card-grid">
-            <label class="card-option">
-              <input type="radio" name="casca" value="Chocolate ao Leite" checked>
-              <img src="assets/cascas/6486901d6175cc6c77408809575b4a2b.jpg" alt="Chocolate ao Leite">
-              <span>Chocolate</span>
-            </label>
-            <label class="card-option">
-              <input type="radio" name="casca" value="Chocolate Branco">
-              <img src="assets/cascas/3670200d702753978b6ac6868872cac1.jpg" alt="Chocolate Branco">
-              <span>Chocolate Branco</span>
-            </label>
-          </div>
-        </section>
-      
-        <section>
-          <h2>2. Escolha o Recheio</h2>
-          <div class="card-grid">
-            <label class="card-option">
-              <input type="radio" name="recheio" value="Ninho" checked>
-              <img src="assets/recheio/60c79c21be2fe918df9fe7bae7e1c1ae.jpg" alt="Ninho">
-              <span>Ninho</span>
-            </label>
-            <label class="card-option">
-              <input type="radio" name="recheio" value="Brigadeiro">
-              <img src="assets/recheio/4cd440545ed092fbbd56ed98e39770a2.jpg" alt="Brigadeiro">
-              <span>Brigadeiro</span>
-            </label>
-            <label class="card-option">
-              <input type="radio" name="recheio" value="Maracujá">
-              <img src="assets/recheio/45f3a22c2c4da84d45d44b359fb43f0b.jpg" alt="Maracujá">
-              <span>Maracujá</span>
-            </label>
-            <label class="card-option">
-              <input type="radio" name="recheio" value="Limão">
-              <img src="assets/recheio/03ca515c052837de0b5d4c7eafa95513.jpg" alt="Limão">
-              <span>Limão</span>
-            </label>
-          </div>
-        </section>
+  <main class="produtos-container">
+    <script src="js/catalogo.js"></script>
+  </main>
 
-        <section>
-          <h2>3. Granulado do recheio</h2>
-          <div class="card-grid">
-            <label class="card-option">
-              <input type="radio" name="granulado" value="Granulado preto e branco" checked>
-              <img src="assets/granulado/d5ec0e653dedda8546206118d3fa70d6.jpg" alt="Granulado preto e branco">
-              <span>Granulado preto e branco</span>
-            </label>
-            <label class="card-option">
-              <input type="radio" name="granulado" value="Castanhas trituradas">
-              <img src="assets/granulado/6c723d2c5b94addd98352636635a0017.jpg" alt="Castanhas trituradas">
-              <span>Castanhas trituradas</span>
-            </label>
-          </div>
-        </section>
-
-        <section>
-          <h2 id="tituloComplementos">4. Escolha até 2 Complementos</h2>
-          <div class="card-grid">
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Uvas frescas">
-              <img src="assets/acompanhamento/ab08051d9417e36bc96e861640cbfb35.jpg" alt="Uvas frescas">
-              <span>Uvas frescas</span>
-            </label>
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Morangos frescos">
-              <img src="assets/acompanhamento/20aad5d2236c6c5a37058cfa8a1a6ed5.jpg" alt="Morangos frescos">
-              <span>Morangos frescos</span>
-            </label>
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Pedaços de Kit Kat">
-              <img src="assets/acompanhamento/379da9cda17655fa23b1f14bd4839c75.jpg" alt="Pedaços de Kit Kat">
-              <span>Pedaços de Kit Kat</span>
-            </label>
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Brigadeiro de Ninho">
-              <img src="assets/acompanhamento/46d447d01a1c10d5fcc0d8ccb14d9af1.jpg" alt="Brigadeiro de Ninho">
-              <span>Brigadeiro de Ninho</span>
-            </label>
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Brigadeiro de Chocolate">
-              <img src="assets/acompanhamento/b1ae25b3e4ea600c6e58d918fb337084.jpg" alt="Brigadeiro de Chocolate">
-              <span>Brigadeiro de Chocolate</span>
-            </label>
-            <label class="card-option">
-              <input type="checkbox" name="complementos" value="Brigadeiro de Castanha">
-              <img src="assets/acompanhamento/917766ca93deac652989dab28d5d9ac2.jpg" alt="Brigadeiro de Castanha">
-              <span>Brigadeiro de Castanha</span>
-            </label>
-          </div>
-        </section>
-      </div>
-
-      <div id="ovoSegundario" style="display: none;"></div>
-    
-      <button type="submit" class="btn">Enviar Pedido pelo WhatsApp</button>
-    </form>    
+  <div id="carrinho-modal" class="modal hidden">
+    <h2>Seu Carrinho</h2>
+    <ul id="lista-carrinho"></ul>
+    <p>Total: R$ <span id="total-carrinho">0,00</span></p>
+    <button onclick="enviarPedido()">Enviar pelo WhatsApp</button>
+    <button onclick="fecharCarrinho()">Fechar</button>
   </div>
-  <script src="index.js"></script>
+
+  <script src="js/filtro.js"></script>
+  <script src="js/carrinho.js"></script>
 </body>
 </html>
