@@ -1,5 +1,6 @@
 img, nome, descricao, valor, categoria, ativo
 assets/catalogo/brigadeiro.jpg,Caixinha de Brigadeiro,Deliciosos brigadeiro feito com chocolate e ninho.,6.00,doce,true
+assets/catalogo/bolo.jpg,Bolo no pote de Ninho,Deliciosa Fatia de bolo de ninho.,10.00,doce,true
 assets/catalogo/coxinha.jpg,Coxinha de Frango,Coxinha com massa crocante e recheio cremoso.,6.00,salgado,true
 assets/catalogo/coxinharequeijao.jpg,Coxinha de Frango com Requeijão,Coxinha com massa crocante e recheio cremoso com requeijão.,7.00,salgado,true
 assets/catalogo/torta.jpg,Empada de frango,Deliciosa empada de frango crocante e saborosa que derete na boca.,10.00,salgado,true
