@@ -1,6 +1,20 @@
-img, nome, descricao, valor, categoria, ativo
-assets/catalogo/brigadeiro.jpg,Caixinha de Brigadeiro,Deliciosos brigadeiro feito com chocolate e ninho.,6.00,doce,true
-assets/catalogo/bolo.jpg,Bolo no pote de Ninho,Deliciosa Fatia de bolo de ninho.,10.00,doce,true
-assets/catalogo/coxinha.jpg,Coxinha de Frango,Coxinha com massa crocante e recheio cremoso.,6.00,salgado,true
-assets/catalogo/coxinharequeijao.jpg,Coxinha de Frango com Requeijão,Coxinha com massa crocante e recheio cremoso com requeijão.,7.00,salgado,true
-assets/catalogo/torta.jpg,Empada de frango,Deliciosa empada de frango crocante e saborosa que derete na boca.,10.00,salgado,true
+img; nome; descricao; valor; categoria; ativo
+./assets/catalogo/copo_felicidade/brownie.jpg;Copo da felicidade Brownie;Camadas de brigadeiro de Ninho, mousse de Ninho, brownie e Nutella.;15.00;copo_felicidade;true
+./assets/catalogo/copo_felicidade/crocante.jpg;Copo da felicidade Ovomaltine;Camadas de brigadeiro de Ninho, mousse de Ninho, brownie muito Ovomaltine e brigadeiro.;15.50;copo_felicidade;true
+./assets/catalogo/copo_felicidade/maracuja.jpg;Copo da felicidade Maracujá;Camadas de maracujá, brigadeiro e brownie.;16.00;copo_felicidade;true
+./assets/catalogo/copo_felicidade/morango.jpg;Copo da felicidade Morango;Brigadeiro de Ninho, mousse de Ninho e morango.;15.50;copo_felicidade;true
+./assets/catalogo/copo_felicidade/uva.jpg;Copo da felicidade Uva;Camadas de brigadeiro de Ninho, mousse de Ninho, uvas e Nutella, super cremoso..;15.00;copo_felicidade;true
+./assets/catalogo/bolos/brigadeiro.jpg;Bolo Vulcão de Brigadeiro 15 cm;Delicioso bolo de brigadeiro, para rechear seu Dia de felicidade, são 15 centímetros de pura gostosura.;25.00;bolo;true
+./assets/catalogo/bolos/bolo_oreo.jpg;Bolo Vulcão de Oreo 15 cm;Delicioso bolo sabor Oreo, para rechear seu Dia de felicidade, são 15 centímetros de pura gostosura.;26.00;bolo;true
+./assets/catalogo/bolos/ferrero_rocher.jpg;Bolo Vulcão de Ferrero Rocher 15 cm;Delicioso bolo sabor Ferrero Rocher, para rechear seu Dia de felicidade, são 15 centímetros de pura gostosura.;27.50;bolo;true
+./assets/catalogo/bolos/ninho_nutella.jpg;Bolo Vulcão de Ninho com Nutella 15 cm;Delicioso bolo sabor Ninho com Nutella, para rechear seu Dia de felicidade, são 15 centímetros de pura gostosura.;26.50;bolo;true
+./assets/catalogo/bolos/mini_bolo_vulcao.jpg;Mini Bolo Vulcão de Ninho com Nutella;Delicioso mini bolo vulcão sabor Ninho com Nutella, para rechear seu Dia de felicidade, são 10 centímetros de pura gostosura.;13.00;bolo;true
+./assets/catalogo/bolos/mini_vulcao_morango.jpg;Mini Bolo Vulcão de Ninho com Morango;Delicioso mini bolo vulcão sabor Ninho com Morango, para rechear seu Dia de felicidade, são 10 centímetros de pura gostosura.;14.00;bolo;true
+./assets/catalogo/doces/brownie_choconinho.jpg;Brownie de Choconinho;Uma verdadeira explosão de sabor! Camada de brownie macio, coberto com brigadeiro tradicional e brigadeiro de Ninho, finalizado com granulado. Cremoso, chocolatudo e viciante!;11.00;doces;true
+./assets/catalogo/doces/brownie_morango.jpg;Brownie de Ninho com Morango e Nutella;Nosso delicioso brownie com creme de Ninho e muita Nutella.;12.50;doces;true
+./assets/catalogo/doces/bolo_ninho.jpg;Bolo de Ninho Gelado;Bolo de Ninho Gelado dos sonhos! Massa super fofinha, bem molhadinha e recheada com um creme irresistível de leite Ninho. Perfeito para quem ama uma sobremesa cremosa e refrescante!;11.00;doces;true
+./assets/catalogo/doces/brioreo_supremo.jpg;Brioreo Supremo;Creme de Ninho com Oreo e brigadeiro super cremoso e delicioso.;13.50;doces;true
+./assets/catalogo/doces/;Casadinho no Pote;Camadas de bolo de chocolate fofinho intercaladas com um creme de leite Ninho suave e uma mousse de chocolate super cremoso e irresistível.;12.00;doces;true
+./assets/catalogo/doces/coxinha_uva.jpg;Coxinha de Uva;Coxinha feita com brigadeiro de Ninho, uvas em volta e Nutella, super cremoso e delicioso.;11.50;doces;true
+./assets/catalogo/doces/coxinha_morango.jpg;Coxinha de Morango;Brigadeiro de Ninho com morango e Nutella.;12.00;doces;true
+./assets/catalogo/doces/pave_morango.jpg;Pavê de Ninho com Morango;Mousse de Ninho, brigadeiro branco, biscoito maisena e muito morango.;11.00;doces;true

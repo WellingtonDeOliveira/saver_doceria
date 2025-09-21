@@ -5,7 +5,7 @@ fetch('assets/catalogo.txt')
     .then(data => {
         const linhas = data.trim().split('\n');
         linhas.forEach(linha => {
-            const [img, nome, descricao, valor, categoria, ativo] = linha.split(',');
+            const [img, nome, descricao, valor, categoria, ativo] = linha.split(';');
 
             if (ativo.trim() !== 'true') return;
 
