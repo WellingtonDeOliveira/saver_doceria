@@ -78,6 +78,6 @@ function enviarPedido() {
   });
   mensagem += `\nTotal: R$ ${carrinho.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toFixed(2)}`;
 
-  const url = `https://wa.me/558599436791?text=${encodeURIComponent(mensagem)}`;
+  const url = `https://wa.me/5585982213551?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');
 }
