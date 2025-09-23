@@ -8,6 +8,7 @@ function adicionarAoCarrinho(nome, preco) {
     carrinho.push({ nome, preco, quantidade: 1 });
   }
   atualizarCarrinho();
+  mostrarToast(`${nome} adicionado ao carrinho!`);
 }
 
 function removerDoCarrinho(nome) {
@@ -26,6 +27,19 @@ function alterarQuantidade(nome, delta) {
   }
 }
 
+function mostrarToast(mensagem) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.textContent = mensagem;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
 function atualizarCarrinho() {
   const lista = document.getElementById('lista-carrinho');
   lista.innerHTML = '';
@@ -41,15 +55,14 @@ function atualizarCarrinho() {
         <strong>${item.nome}</strong>
         <span>R$ ${(item.preco * item.quantidade).toFixed(2)}</span>
       </div>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; margin-bottom: 10px;">
         <div>
           <button onclick="alterarQuantidade('${item.nome}', -1)">➖</button>
           <span style="margin: 0 0.5rem;">${item.quantidade}</span>
           <button onclick="alterarQuantidade('${item.nome}', 1)">➕</button>
         </div>
         <button onclick="removerDoCarrinho('${item.nome}')" style="color: red;">Remover</button>
-      </div>
-    `;
+      </div>`;
     lista.appendChild(li);
   });
 
@@ -72,11 +85,18 @@ function enviarPedido() {
     return;
   }
 
+  const dia = document.getElementById('dia-agendamento').value;
+  if (!dia) {
+    alert("Por favor, selecione um dia para o agendamento!");
+    return;
+  }
+
   let mensagem = "Olá! Gostaria de fazer um pedido:\n\n";
   carrinho.forEach(item => {
     mensagem += `• ${item.nome} (x${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
   });
   mensagem += `\nTotal: R$ ${carrinho.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toFixed(2)}`;
+  mensagem += `\n\n Agendamento para: ${dia}`;
 
   const url = `https://wa.me/5585982213551?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');

@@ -23,6 +23,10 @@
     <button onclick="filtrarProdutos('bolo')">Bolos</button>
   </div>  
 
+  <div class="aviso-agendamento">
+  <p>📌 Os agendamentos estão disponíveis apenas para <strong>Segunda-feira</strong> e <strong>Terça-feira</strong>.</p>
+  </div>
+
   <main class="produtos-container">
     <script src="js/catalogo.js"></script>
   </main>
@@ -30,10 +34,18 @@
   <div id="carrinho-modal" class="modal hidden">
     <h2>Seu Carrinho</h2>
     <ul id="lista-carrinho"></ul>
-    <p>Total: R$ <span id="total-carrinho">0,00</span></p>
+    <label for="dia-agendamento"><strong>Escolha o dia do agendamento:</strong></label>
+    <select id="dia-agendamento" style="margin-bottom: 10px;">
+      <option value="">Selecione...</option>
+      <option value="Segunda-feira">Segunda-feira</option>
+      <option value="Terça-feira">Terça-feira</option>
+    </select>
+    <p style="margin-top: 10px;">Total: R$ <span id="total-carrinho">0,00</span></p>
     <button onclick="enviarPedido()">Enviar pelo WhatsApp</button>
     <button onclick="fecharCarrinho()">Fechar</button>
   </div>
+
+  <div id="toast-container"></div>
 
   <script src="js/filtro.js"></script>
   <script src="js/carrinho.js"></script>

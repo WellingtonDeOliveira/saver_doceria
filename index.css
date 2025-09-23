@@ -15,6 +15,8 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: var(--rosa-claro);
     color: var(--cinza);
+    margin: 0;
+    padding-top: 70px;
 }
 
 header {
@@ -24,6 +26,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;   
+    top: 0;  
+    left: 0;
+    width: 100%;        
+    z-index: 1000;      
+    padding: 10px 20px;  
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
 }
 
 .logoSpace {
@@ -225,4 +234,86 @@ main.produtos-container {
 #lista-carrinho button:hover {
     background-color: var(--rosa-destaque);
     color: var(--branco);
+}
+
+/* Container dos toasts */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Toast individual */
+.toast {
+  background: #4caf50; /* verde sucesso */
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.aviso-agendamento {
+  margin: 15px auto;
+  max-width: 800px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ffe4ec, #fff0f6); /* fundo suave em rosa */
+  border: 1px solid #f472b6; /* rosa médio */
+  border-radius: 12px;
+  text-align: center;
+  font-size: 1rem;
+  color: #6b214d; /* rosa mais escuro para texto */
+  box-shadow: 0 4px 8px rgba(244, 114, 182, 0.25); /* sombra em tom rosado */
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.aviso-agendamento p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.aviso-agendamento strong {
+  color: #db2777; /* rosa vibrante para destacar os dias */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#dia-agendamento {
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #f472b6;
+  font-size: 1rem;
+  background: #fff0f6;
+  color: #6b214d;
+}
+
+#dia-agendamento:focus {
+  outline: none;
+  border-color: #db2777;
+  box-shadow: 0 0 4px rgba(219, 39, 119, 0.5);
 }
