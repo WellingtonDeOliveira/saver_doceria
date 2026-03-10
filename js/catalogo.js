@@ -2,6 +2,18 @@ const produtosContainer = document.querySelector('.produtos-container');
 let produtosCatalogo = [];
 let opcoesPascoa = null;
 
+const PRECO_MODELOS_MONTE = {
+  '1x50g': 12,
+  '4x50g': 40,
+  '2x100g': 40,
+  '350g': 60,
+  '500g': 100
+};
+
+function formatarPreco(valor) {
+  return Number(valor).toFixed(2).replace('.', ',');
+}
+
 fetch('assets/catalogo.txt')
   .then(response => response.text())
   .then(data => {
@@ -30,13 +42,18 @@ fetch('assets/catalogo.txt')
       }
       card.setAttribute('data-categoria', produto.categoria);
 
+      const ehMonteSeuOvo = produto.nome.toLowerCase().includes('monte seu ovo');
+      const precoExibicao = ehMonteSeuOvo
+        ? 'R$ 12,00 a R$ 100,00'
+        : `R$ ${formatarPreco(produto.valor)}`;
+
       card.innerHTML = `
       <img src="${produto.img}" alt="${produto.nome}">
       <div class="produto-info">
       <h2>${produto.nome}</h2>
       <div class="produto-detalhes">
         <p>${produto.descricao}</p>
-        <span class="preco">R$ ${produto.valor.toFixed(2)}</span>
+        <span class="preco">${precoExibicao}</span>
       </div>
       ${produto.categoria === 'pascoa' ? '<span class="badge-pascoa">Páscoa 🐰</span>' : ''}
       <button onclick="handleAdicionar(${index})">Adicionar</button>
@@ -150,16 +167,8 @@ function abrirModalPascoa(produto) {
     let subEtapaAtual = 0;
     let escolhasOvos = [];
 
-    const precoPorModelo = {
-      '1x50g': 12,
-      '4x50g': 40,
-      '2x100g': 40,
-      '350g': 60,
-      '500g': 100
-    };
-
     function getPrecoModelo() {
-      return precoPorModelo[modeloSelecionado] || Number(produto.valor) || 0;
+      return PRECO_MODELOS_MONTE[modeloSelecionado] || Number(produto.valor) || 0;
     }
 
     function getLimiteComplementos() {
@@ -248,7 +257,11 @@ function abrirModalPascoa(produto) {
           });
 
           label.appendChild(input);
-          label.append(` ${opcao}`);
+          const precoModelo = PRECO_MODELOS_MONTE[opcao];
+          const textoOpcao = precoModelo
+            ? `${opcao} - R$ ${formatarPreco(precoModelo)}`
+            : opcao;
+          label.append(` ${textoOpcao}`);
           stepContent.appendChild(label);
         });
 

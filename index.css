@@ -464,6 +464,10 @@ main.produtos-container {
     background: #fff7fb;
 }
 
+.modal-pascoa-opcao {
+    font-weight: 500;
+}
+
 .modal-pascoa-actions {
     display: flex;
     justify-content: space-between;
