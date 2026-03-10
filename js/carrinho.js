@@ -1,11 +1,11 @@
 let carrinho = [];
 
-function adicionarAoCarrinho(nome, preco) {
-  const itemExistente = carrinho.find(item => item.nome === nome);
+function adicionarAoCarrinho(nome, preco, whatsappTexto = '') {
+  const itemExistente = carrinho.find(item => item.nome === nome && item.whatsappTexto === whatsappTexto);
   if (itemExistente) {
     itemExistente.quantidade++;
   } else {
-    carrinho.push({ nome, preco, quantidade: 1 });
+    carrinho.push({ nome, preco, quantidade: 1, whatsappTexto });
   }
   atualizarCarrinho();
   mostrarToast(`${nome} adicionado ao carrinho!`);
@@ -93,11 +93,16 @@ function enviarPedido() {
 
   let mensagem = "Olá! Gostaria de fazer um pedido:\n\n";
   carrinho.forEach(item => {
+    if (item.whatsappTexto) {
+      mensagem += `• ${item.whatsappTexto} (x${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
+      return;
+    }
+
     mensagem += `• ${item.nome} (x${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
   });
   mensagem += `\nTotal: R$ ${carrinho.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toFixed(2)}`;
   mensagem += `\n\n Agendamento para: ${dia}`;
 
-  const url = `https://wa.me/5585982213551?text=${encodeURIComponent(mensagem)}`;
+  const url = `https://wa.me/5585986531190?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');
 }

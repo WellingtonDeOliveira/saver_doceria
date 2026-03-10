@@ -74,6 +74,11 @@ main.produtos-container {
     transition: transform 0.2s;
 }
 
+.produto-card.categoria-pascoa {
+    background: #fff5f8;
+    border: 1px solid #ffdce8;
+}
+
 @media (max-width: 768px) {
     .produto-card {
         flex: 1 1 100%;
@@ -98,6 +103,19 @@ main.produtos-container {
     justify-content: space-between;
     padding: 1rem;
     flex-grow: 1;
+    position: relative;
+}
+
+.badge-pascoa {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #7f2950;
+    background: #ffe0ec;
+    border-radius: 999px;
+    padding: 4px 8px;
 }
 
 .produto-info h2 {
@@ -316,4 +334,173 @@ main.produtos-container {
   outline: none;
   border-color: #db2777;
   box-shadow: 0 0 4px rgba(219, 39, 119, 0.5);
+}
+
+.modal-pascoa-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.modal-pascoa-overlay.hidden {
+    display: none;
+}
+
+.modal-pascoa {
+    width: 520px;
+    max-width: 94%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 2px solid var(--rosa-destaque);
+}
+
+.modal-pascoa h2 {
+    color: var(--rosa-destaque);
+    margin-bottom: 0.5rem;
+}
+
+.modal-pascoa-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-pascoa-fechar {
+    border: none;
+    background: #ffe0ec;
+    color: #922a5d;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-pascoa-fechar:hover {
+    background: #ffcfe1;
+}
+
+#modal-pascoa-step-title {
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.modal-pascoa-kit-progress {
+    margin: 0.25rem 0 0.75rem;
+}
+
+.modal-pascoa-substep-progress {
+    margin: 0 0 0.75rem;
+}
+
+.kit-progress-segmentos {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.kit-segmento {
+    flex: 1;
+    height: 8px;
+    border-radius: 999px;
+    background: #f7dbe7;
+}
+
+.kit-segmento.ativo {
+    background: #f48fb1;
+}
+
+.kit-segmento.completo {
+    background: #ec799e;
+}
+
+.substep-progress-segmentos {
+    display: flex;
+    gap: 0.45rem;
+}
+
+.substep-segmento {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.4rem;
+    border-radius: 999px;
+    background: #f5edf1;
+    color: #8b5c72;
+    border: 1px solid #ecd7e1;
+}
+
+.substep-segmento small {
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.substep-segmento.ativo {
+    background: #ffe4ef;
+    color: #7f2950;
+    border-color: #f2bad0;
+}
+
+.substep-segmento.completo {
+    background: #f48fb1;
+    color: #fff;
+    border-color: #f48fb1;
+}
+
+.modal-pascoa-opcao {
+    display: block;
+    margin: 0.4rem 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: #fff7fb;
+}
+
+.modal-pascoa-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.modal-pascoa-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.modal-pascoa-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.modal-pascoa-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.modal-pascoa-btn-secundario {
+    background: #f7f0f4;
+    color: #6c4b5b;
+}
+
+.modal-pascoa-btn-primario {
+    background-color: var(--rosa-destaque);
+    color: var(--branco);
+}
+
+@media (max-width: 768px) {
+    .modal-pascoa {
+        width: 90%;
+    }
 }
