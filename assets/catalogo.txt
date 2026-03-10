@@ -1,10 +1,10 @@
 img; nome; descricao; valor; categoria; ativo
 ./assets/catalogo/pascoa/ovo_colher.jpg;[PÁSCOA] Monte seu Ovo;Personalize seu ovo artesanal em 4 etapas: Modelo, Casca, Recheio e Complementos.;0.00;pascoa;true
-./assets/catalogo/pascoa/ovo_colher_ferreiro.jpg;Ovo de 350g Ferrero Rocher;O clássico sabor Ferrero Rocher em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;95.00;pascoa;true
-./assets/catalogo/pascoa/ovo_colher_oreo.jpg;Ovo de 350g Oreo;O clássico sabor Oreo em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;85.00;pascoa;true
-./assets/catalogo/pascoa/ovo_colher_prestigio.png;Ovo de 350g Prestígio;O clássico sabor Prestígio em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;85.00;pascoa;true
-./assets/catalogo/pascoa/ovo_colher_bueno.jpg;Ovo de 350g Kinder Bueno;O clássico sabor Kinder Bueno em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;98.00;pascoa;true
-./assets/catalogo/pascoa/ovo_colher_4_50g.jpg;Kit Degustação 4x50g;Quatro mini ovos gourmet de 50g cada, perfeitos para presentear ou saborear vários sabores.;65.00;pascoa;true
+./assets/catalogo/pascoa/ovo_colher_ferreiro.jpg;Ovo de 350g Ferrero Rocher;O clássico sabor Ferrero Rocher em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;80.00;pascoa;true
+./assets/catalogo/pascoa/ovo_colher_oreo.jpg;Ovo de 350g Oreo;O clássico sabor Oreo em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;65.00;pascoa;true
+./assets/catalogo/pascoa/ovo_colher_prestigio.png;Ovo de 350g Prestígio;O clássico sabor Prestígio em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;65.00;pascoa;true
+./assets/catalogo/pascoa/ovo_colher_bueno.jpg;Ovo de 350g Kinder Bueno;O clássico sabor Kinder Bueno em uma casca artesanal de 350g, recheio cremoso e acabamento premium.;70.00;pascoa;true
+./assets/catalogo/pascoa/ovo_colher_4_50g.jpg;Kit Degustação 4x50g;Quatro mini ovos gourmet de 50g cada, perfeitos para presentear ou saborear vários sabores.;40.00;pascoa;true
 ./assets/catalogo/copo_felicidade/brownie.jpg;Copo da felicidade Brownie;Camadas de brigadeiro de Ninho, mousse de Ninho, brownie e Nutella.;15.00;copo_felicidade;true
 ./assets/catalogo/copo_felicidade/crocante.jpg;Copo da felicidade Ovomaltine;Camadas de brigadeiro de Ninho, mousse de Ninho, brownie muito Ovomaltine e brigadeiro.;15.50;copo_felicidade;true
 ./assets/catalogo/copo_felicidade/maracuja.jpg;Copo da felicidade Maracujá;Camadas de maracujá, brigadeiro e brownie.;16.00;copo_felicidade;true
