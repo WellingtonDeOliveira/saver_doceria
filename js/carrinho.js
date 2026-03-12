@@ -85,12 +85,6 @@ function enviarPedido() {
     return;
   }
 
-  const dia = document.getElementById('dia-agendamento').value;
-  if (!dia) {
-    alert("Por favor, selecione um dia para o agendamento!");
-    return;
-  }
-
   let mensagem = "Olá! Gostaria de fazer um pedido:\n\n";
   carrinho.forEach(item => {
     if (item.whatsappTexto) {
@@ -101,7 +95,6 @@ function enviarPedido() {
     mensagem += `• ${item.nome} (x${item.quantidade}) - R$ ${(item.preco * item.quantidade).toFixed(2)}\n`;
   });
   mensagem += `\nTotal: R$ ${carrinho.reduce((acc, item) => acc + item.preco * item.quantidade, 0).toFixed(2)}`;
-  mensagem += `\n\n Agendamento para: ${dia}`;
 
   const url = `https://wa.me/5585986531190?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');

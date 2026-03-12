@@ -320,22 +320,6 @@ main.produtos-container {
   to { opacity: 1; transform: translateY(0); }
 }
 
-#dia-agendamento {
-  margin: 10px 0;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #f472b6;
-  font-size: 1rem;
-  background: #fff0f6;
-  color: #6b214d;
-}
-
-#dia-agendamento:focus {
-  outline: none;
-  border-color: #db2777;
-  box-shadow: 0 0 4px rgba(219, 39, 119, 0.5);
-}
-
 .modal-pascoa-overlay {
     position: fixed;
     inset: 0;

@@ -4,7 +4,7 @@ let opcoesPascoa = null;
 
 const PRECO_MODELOS_MONTE = {
   '1x50g': 12,
-  '4x50g': 40,
+  '4x50g': 35,
   '2x100g': 40,
   '350g': 60,
   '500g': 100
@@ -44,7 +44,7 @@ fetch('assets/catalogo.txt')
 
       const ehMonteSeuOvo = produto.nome.toLowerCase().includes('monte seu ovo');
       const precoExibicao = ehMonteSeuOvo
-        ? 'R$ 12,00 a R$ 100,00'
+        ? 'R$ 12,00 a R$ 60,00'
         : `R$ ${formatarPreco(produto.valor)}`;
 
       card.innerHTML = `
