@@ -1,5 +1,5 @@
 etapa;opcoes
-modelo;1x50g, 4x50g, 2x100g, 350g
+modelo;1x50g, 2x100g, 350g
 casca;Chocolate ao Leite, Chocolate Branco, Casca de Oreo
 recheio;Brigadeiro, Brigadeiro de Ninho, Mousse de Maracujá, Ninho com Morango, Ninho com Nutela, Prestígio, Paçoca, Oreo
 complementos;M&M's, Kinder Bueno, KitKat, Bis, Paçoca, Morango, Uva, Brigadeiros, Beijinho
