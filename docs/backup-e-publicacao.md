@@ -40,7 +40,9 @@ Conferir pelo painel: busca por celular, endereço atual, pedido com original e 
 
 ## Publicação automática e ambientes
 
-Os workflows em `.github/workflows/` validam pushes/PRs. Um push em `main` aprovado publica homologação automaticamente; produção exige `workflow_dispatch` explícito. Criar environments GitHub `staging` e `production`, com aprovação obrigatória para `production`. Em cada environment configurar `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` como secrets, com escopo somente aos Workers, D1 e KV necessários. Não colocar credenciais no repositório. A configuração em código não cria esses secrets nem a proteção do environment.
+Os workflows em `.github/workflows/` validam pushes/PRs. Um push em `main` aprovado publica homologação automaticamente; produção exige `workflow_dispatch` explícito. Os environments GitHub `staging` e `production` foram criados com restrição à branch `main`; produção exige aprovação de `WellingtonDeOliveira`. A variável pública `CLOUDFLARE_ACCOUNT_ID` já foi configurada nos dois. Falta autorizar e cadastrar `CLOUDFLARE_API_TOKEN` como secret de cada environment. Use permissão de edição de Workers/D1/KV apenas na conta necessária e não coloque tokens no repositório. O workflow falha cedo com mensagem clara se faltar credencial.
+
+A configuração de ambientes foi conferida pela API oficial. O endpoint e os campos estão documentados em [GitHub: ambientes de publicação](https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment). Uma aprovação pelo próprio proprietário é permitida, pois esta operação possui um único administrador; o job de produção ainda aguarda a ação de aprovação.
 
 `scripts/check-deploy.mjs` rejeita Access incompleto, banco/KV compartilhados entre ambientes, vínculos divergentes e endpoints alternativos habilitados em produção. Nenhum workflow cria assinatura ou serviço pago. A cota gratuita do GitHub Actions também pode suspender a publicação. Migrações são aplicadas no banco do ambiente antes da publicação; não altere IDs para contornar falhas.
 
@@ -56,3 +58,10 @@ Antes de cada publicação de produção: backup completo e restaurado, plano Wo
 6. Se for preciso voltar: pausar novas solicitações, exportar **também os dados novos** do período, preservar D1/KV de produção e restaurar DNS/Pages/rotas ao registro anterior. Não restaure backup antigo sobre pedidos novos. O atendimento das solicitações já registradas continua pelo WhatsApp/painel protegido; o site antigo não consome o novo banco. Conciliar manualmente esses registros antes de reabrir o novo site.
 
 Sem reserva no envio, a disponibilidade final é confirmada no atendimento. Interrupções por cotas gratuitas e atraso de propagação KV são limitações aceitas. Ausência de credencial, secrets, política Access, backup ou teste de domínio deve permanecer como pendência, nunca como publicação concluída.
+
+## Estado real conferido em 22/10/2026
+
+- Homologação publicada com migrações 0002/0003, painel Access e Workers Free/Teams Free Base confirmados. O fluxo integrado de estoque e o backup remoto foram ensaiados.
+- Site antigo: GitHub Pages da branch `main`, pasta `/`, domínio `saverdoceria.shop`; commit remoto preservado `5d7c6cefd5620b1f7496ecbd7092dba90e53e0fa`. Não atualizar a `main` remota antes da troca planejada: o novo CNAME versionado é `saverdoceria.com.br` e alteraria a publicação antiga.
+- Nova zona Cloudflare `saverdoceria.com.br`: pendente de ativação. O painel informa nameservers atuais `a.auto.dns.br` e `b.auto.dns.br`, e solicita `sue.ns.cloudflare.com` e `wesley.ns.cloudflare.com`. Não presumir controle do registrador nem desativar DNSSEC automaticamente. A alteração deve ser feita na conta autorizada do Registro.br e sua propagação deve ser verificada antes da troca.
+- Produção não publicada, Access de produção não criado, nenhum DNS ou plano pago alterado. Secrets de deploy ainda pendentes de autorização.

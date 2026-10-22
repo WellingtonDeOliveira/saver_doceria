@@ -249,14 +249,16 @@ function showView(name) {
     "clients",
   ])
     $(`#${view}-view`).hidden = view !== name;
-  const href =
-    name === "edit"
-      ? "#produtos"
-      : name === "categories"
-        ? "#categorias"
-        : name === "stock"
-          ? "#estoque"
-          : "#produtos";
+  const href = {
+    products: "#produtos",
+    edit: "#produtos",
+    categories: "#categorias",
+    stock: "#estoque",
+    orders: "#pedidos",
+    order: "#pedidos",
+    clients: "#clientes",
+    settings: "#configuracoes",
+  }[name];
   for (const link of document.querySelectorAll(".sidebar nav a")) {
     if (link.hash === href) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
@@ -587,7 +589,13 @@ async function loadHistory() {
         (movement.order_reference
           ? `Pedido ${movement.order_reference} · `
           : "") +
-          (movement.reason ||
+          ((movement.origin === "order"
+            ? {
+                confirm: "Confirmação do pedido",
+                cancel: "Cancelamento do pedido",
+                edit: "Ajuste da negociação",
+              }[movement.reason]
+            : movement.reason) ||
             (movement.origin === "product_creation"
               ? "Cadastro do produto"
               : "Manual")),
