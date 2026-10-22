@@ -1,5 +1,22 @@
 # Implementação das issues 05–16
 
+## Retomada autorizada — 22/10/2026, produção
+
+O usuário autorizou explicitamente continuar com Access/token e informou o domínio ativo. As pendências de autorização/DNS dos checkpoints abaixo foram resolvidas.
+
+- NS públicos conferidos: sue.ns.cloudflare.com e wesley.ns.cloudflare.com. Zona ativa, Universal SSL ativo para apex/wildcard e Always Use HTTPS ativado, sem plano pago.
+- Access produção criado: `a02bbdce-ab80-4b94-90df-ddb2e32f76b4`, host inteiro admin.saverdoceria.com.br; política existente `3e65b831-864c-42d6-8917-b61a0a7d22df` permite apenas wellington220100@gmail.com. AUD público configurado no commit `81154fa`; sessão autorizada real abriu o painel. Sem sessão/JWT inválido: raiz, index.html, admin.js, orders, clients e backup retornam 302 Access. Segunda identidade autenticada não autorizada não disponível; essa limitação fica registrada, sem afirmar que foi testada.
+- Token criado no escopo aprovado e validade 90 dias (20/01/2027), secret cifrado nos environments staging/production. Valor nunca versionado. Identificador do token: `0473d03ba7b744e710d12d6b83db9b3b`. Conta e escopo nos checkpoints anteriores. CLI com esse token publicou ambos os Workers, incluindo custom domains.
+- Produção estava vazia: D1 apenas `_cf_KV`, KV sem chaves; exportação anterior em `.private-backups/pre-production-2026-10-22/production-before.sql`. Migrações 0001–0003 aplicadas com sucesso.
+- Painel publicado `12c51b38-3946-435f-81ba-a518cc9f5d05`; público `64da8db7-57bf-4e74-a6f8-c76b03c972fe`. Domínios https://saverdoceria.com.br e https://admin.saverdoceria.com.br. www redireciona 308 preservando caminho/consulta; HTTP apex redireciona 301 HTTPS. workers.dev de ambos retorna 404; previews desativados. Catálogo 200; rotas administrativas no público 404; POST de origem externa 403.
+- Configuração real Saver Doceria, WhatsApp do site anterior, mensagem inicial e aviso de disponibilidade salvos no painel. Produto/categoria de ensaio criados sem importar catálogo sazonal; foto publicada; pedido fictício `74da64e0-ed65-4675-af13-1691d949a4be` registrado pelo site móvel; link WhatsApp correto sem envio. Confirmar levou estoque 2→1; cancelar devolveu 1→2 e preservou duas revisões. Item oculto/arquivado e categoria desativada; catálogo final vazio.
+- Backup novo de staging e backup de produção baixados pelo painel e restaurados em runtimes locais vazios, inclusive por interface: pedidos, revisões, cliente, estoque e fotos íntegros. Pasta privada `pre-production-2026-10-22`, ACL restrita e ignorada pelo Git. Produção restaurada com pedido cancelado v3, saldo 2, foto, item arquivado e categoria inativa. Nunca publicar esses arquivos.
+- Commit `81154fa`: redirecionamento www testado em HTTP (falhou antes e passou depois), typecheck e guard production aprovados; reviews incrementais standards/spec sem achados. CI completo do PR em `39753400274` aprovado (16 testes HTTP/backup, quatro fluxos móveis e builds).
+- Após validar produção, publicação antiga GitHub Pages desativada via API; configuração anterior privada preservada. Branch remota `codex/site-antigo-pre-migracao` mantém commit antigo. Main remota atualizada para `81154fa`. Não reativar Pages com CNAME novo para fazer rollback; seguir plano preservando os dados novos.
+- CI da main aprovado em `39754702694`. Deploy automático de staging aprovado em `39755014365`; deploy de produção pelo GitHub aprovado em `39754830782`, após aprovação do environment. Ambos executaram migrações e publicação dos dois Workers com o secret configurado. Issues 05–16 concluídas. Automação permanece pausada por conclusão; não há trabalho pendente a retomar. Cópia temporária local do token foi removida após cadastrar os secrets; valor não foi versionado.
+
+## Checkpoint anterior à autorização (histórico)
+
 ## Estado atual — 22/10/2026, após retomada
 
 Este estado substitui os checkpoints históricos abaixo. Issues 05–15 concluídas; issue 16 continua aberta, aguardando ação humana.

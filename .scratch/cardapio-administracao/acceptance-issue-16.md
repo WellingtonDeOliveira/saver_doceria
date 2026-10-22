@@ -1,5 +1,28 @@
 # Aceite remoto da issue 16 — 22/10/2026
 
+## Produção após autorização do usuário
+
+Domínio ativo e NS públicos confirmados. Access `a02bbdce-ab80-4b94-90df-ddb2e32f76b4` criado com allow somente para wellington220100@gmail.com; sessão real autorizada funciona, demais requisições sem sessão/JWT inválido redirecionam ao login. Não foi usada uma segunda identidade autenticada não autorizada; esse caso permanece coberto pela política exata e testes HTTP locais, sem alegar validação real com segunda conta.
+
+| Verificação | Resultado real |
+|---|---|
+| Publicação | Migrações 0001–0003 aplicadas; painel `12c51b38-3946-435f-81ba-a518cc9f5d05`, público `64da8db7-57bf-4e74-a6f8-c76b03c972fe` |
+| Domínios | saverdoceria.com.br e admin.saverdoceria.com.br HTTPS válidos; certificado Universal gratuito ativo |
+| Principal | HTTP→HTTPS 301; www→apex 308; caminho e consulta preservados |
+| Isolamento | D1/KV produção distintos e inicialmente vazios; nenhum catálogo sazonal importado |
+| Privacidade | 302 Access em raiz/index/admin.js/orders/clients/backup sem sessão ou JWT inválido; público não expõe administração (404); origem externa no POST é 403; workers.dev produção 404 |
+| Configurações/foto | Dados reais da loja salvos; uma foto do item sintético publicada e exibida no cardápio |
+| Solicitação móvel | Pedido fictício `74da64e0-ed65-4675-af13-1691d949a4be`, retirada R$1; WhatsApp correto, sem envio; registro persistido antes do link |
+| Estoque | Confirmar 2→1; cancelar 1→2; pedido final cancelado v3 com duas revisões e original preservado |
+| Limpeza | Item oculto/arquivado e categoria inativa; catálogo final vazio, pronto para cadastro real |
+| Recuperação | Download real de produção restaurado em D1/KV locais vazios; foto, cliente, pedido v3, revisões e saldo 2 conferidos; flags de limpeza preservados |
+| CI | PR e main 81154fa aprovados, runs 39753400274 e 39754702694; deploy automático staging 39755014365 e deploy produção 39754830782 concluídos com sucesso |
+| Site antigo | Pages desativado somente após validar produção; configuração privada e branch codex/site-antigo-pre-migracao preservadas para retorno |
+
+Backup de staging atualizado antes da produção e exportação do banco de produção vazio também preservados em `.private-backups/pre-production-2026-10-22/`. Nenhum arquivo privado foi versionado. Limitações: sem reserva no envio, confirmação no atendimento, interrupções possíveis nas cotas gratuitas. Captura final `.wrangler/production-public-mobile.png`.
+
+## Homologação (registro anterior)
+
 Homologação nos Workers saver-public-staging e saver-admin-staging, apenas dados sintéticos. Produção não publicada.
 
 | Verificação real | Resultado |

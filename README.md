@@ -1,6 +1,6 @@
 # Saver Doceria
 
-Cardápio público e painel administrativo em dois Cloudflare Workers, com D1 e KV. Inclui configurações, carrinho persistente, revalidação, retirada/entrega com ajuda ViaCEP, solicitações pelo WhatsApp, clientes, negociação e ciclo de pedidos com estoque atômico. O novo fluxo começa vazio. O site estático antigo na raiz permanece disponível para a migração do domínio (issue 16); os Workers publicam exclusivamente os diretórios `public/` e `admin/`.
+Cardápio público e painel administrativo em dois Cloudflare Workers, com D1 e KV. Inclui configurações, carrinho persistente, revalidação, retirada/entrega com ajuda ViaCEP, solicitações pelo WhatsApp, clientes, negociação e ciclo de pedidos com estoque atômico. O novo fluxo começa vazio. O código estático antigo na raiz e a branch `codex/site-antigo-pre-migracao` ficam preservados para retorno; sua publicação Pages foi desativada após a migração. Os Workers publicam exclusivamente os assets gerados a partir de `public/` e `admin/`.
 
 ## Desenvolvimento e validação
 
@@ -29,7 +29,7 @@ O painel exige Access também localmente. Configure as variáveis de desenvolvim
 
 ## Homologação e produção
 
-Os IDs D1/KV nos dois arquivos Wrangler apontam a recursos separados da conta usada nesta sessão. A migração de homologação foi aplicada, e os dois Workers de homologação foram publicados e validados. A produção foi apenas provisionada, sem publicação ou troca de domínio.
+Os IDs D1/KV nos dois arquivos Wrangler apontam a recursos separados da conta usada nesta sessão. Migrações e Workers de homologação e produção foram publicados e validados. A produção usa `saverdoceria.com.br` e `admin.saverdoceria.com.br`, com Access e HTTPS; os endpoints alternativos de produção ficam desativados.
 
 Domínio de produção atualizado pelo usuário: `saverdoceria.com.br`, com painel em `admin.saverdoceria.com.br`. O `CNAME` e as origens previstas de produção refletem esse endereço. Homologação permanece nos hostnames `*.fazcents.workers.dev`.
 
@@ -67,7 +67,7 @@ Usar apenas Workers Free, D1 Free, KV Free e Access Free. O painel de assinatura
 
 Os fluxos de solicitação, pedidos e recuperação das issues 05–15 estão implementados. Os procedimentos de backup/restauração, CI, publicação e retorno ao site anterior estão em [docs/backup-e-publicacao.md](docs/backup-e-publicacao.md). A issue 16 só pode ser encerrada após as verificações reais de produção e DNS.
 
-Em 22/10/2026, as migrações 0002/0003 e os dois Workers foram publicados em homologação. O fluxo integrado de entrega/retirada, negociação, ciclo de pedidos, clientes, fotos e estoque foi conferido no navegador, e um backup remoto baixado pelo painel foi restaurado isoladamente. O [PR #2](https://github.com/WellingtonDeOliveira/saver_doceria/pull/2) passou pelo CI. Produção aguarda ativação DNS e autorização de Access/token; a main remota e o site antigo foram preservados. Evidências detalhadas em [.scratch/cardapio-administracao/acceptance-issue-16.md](.scratch/cardapio-administracao/acceptance-issue-16.md).
+Em 22/10/2026, o escopo integrado foi publicado em homologação e produção após autorização da proprietária. [Cardápio](https://saverdoceria.com.br) e [painel protegido](https://admin.saverdoceria.com.br) usam HTTPS; www redireciona ao principal. Solicitação, confirmação/cancelamento, saldo, foto e backup de produção baixado/restaurado foram conferidos. O [PR #2](https://github.com/WellingtonDeOliveira/saver_doceria/pull/2) passou pelo CI e foi integrado à main. O catálogo começa vazio para cadastro real; o item de ensaio foi arquivado. GitHub Pages antigo foi desativado após o aceite técnico, com a versão anterior preservada na branch `codex/site-antigo-pre-migracao`. Evidências em [.scratch/cardapio-administracao/acceptance-issue-16.md](.scratch/cardapio-administracao/acceptance-issue-16.md).
 
 Além dos contratos abaixo:
 

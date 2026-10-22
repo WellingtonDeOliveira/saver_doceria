@@ -1,5 +1,13 @@
 # Revisão das issues 05–16
 
+## Produção — incremento desde 2a4bd12
+
+Standards e spec revisados independentemente: zero achados concretos em rotas, Access e canonical www. A observação de conferir HTTP→HTTPS no apex foi atendida: Always Use HTTPS ativado e resposta 301 validada remotamente. PUBLIC_ORIGIN explícito nos dois ambientes do Worker público.
+
+Teste HTTP do domínio executado antes/depois (404 antes, 308 esperado depois), typecheck e guard de produção aprovados. CI completo do PR em 81154fa passou (run 39753400274). Access e produção publicados conforme autorização explícita do usuário; ensaio real, backup baixado/restaurado e limpeza registrados em acceptance-issue-16.md.
+
+Verificação final: CI main 39754702694 aprovado; publicação GitHub staging 39755014365 e produção 39754830782 aprovadas, incluindo migrações e deploy dos dois Workers. Critérios técnicos da issue 16 concluídos; limitação de ausência de segunda identidade autenticada negativa explicitamente registrada.
+
 ## Incremento e aceite remoto — 22/10/2026
 
 Ambos os revisores conferiram `e354dbf...fecba57`: zero achados de standards e zero defeitos concretos de spec. Navegação/rótulos corrigidos e CI distingue variável pública de secret. Typecheck aprovado após o ajuste.
