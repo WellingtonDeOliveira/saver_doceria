@@ -37,15 +37,38 @@ test("fotos novas são validadas, substituídas com fallback e protegidas da lim
       415,
     );
     assert.equal((await upload(new Uint8Array([1, 2, 3]))).status, 400);
+    const withoutPixels: Buffer[] = [png.subarray(0, 8)];
+    for (let offset = 8; offset < png.length;) {
+      const length = png.readUInt32BE(offset),
+        end = offset + length + 12;
+      if (png.toString("ascii", offset + 4, offset + 8) !== "IDAT")
+        withoutPixels.push(png.subarray(offset, end));
+      offset = end;
+    }
+    assert.equal(
+      (await upload(Buffer.concat(withoutPixels))).status,
+      400,
+      "PNG sem dados de pixels deve ser recusado",
+    );
+    const badCrc = Buffer.from(png);
+    badCrc[badCrc.length - 1] ^= 1;
+    assert.equal(
+      (await upload(badCrc)).status,
+      400,
+      "PNG com CRC inválido deve ser recusado",
+    );
     assert.equal((await upload(new Uint8Array(256 * 1024 + 1))).status, 413);
     for (const [mime, bytes] of [
-      ['image/jpeg', await sharp(png).jpeg().toBuffer()],
-      ['image/webp', await sharp(png).webp().toBuffer()],
+      ["image/jpeg", await sharp(png).jpeg().toBuffer()],
+      ["image/webp", await sharp(png).webp().toBuffer()],
     ] as const) {
       const valid = await upload(bytes, mime);
       assert.equal(valid.status, 201);
-      const staged = await valid.json() as {id:string};
-      assert.equal((await h.request(`/api/media/${staged.id}`, 'DELETE')).status, 200);
+      const staged = (await valid.json()) as { id: string };
+      assert.equal(
+        (await h.request(`/api/media/${staged.id}`, "DELETE")).status,
+        200,
+      );
     }
     const firstResponse = await upload();
     assert.equal(firstResponse.status, 201);

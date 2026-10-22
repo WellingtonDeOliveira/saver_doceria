@@ -25,7 +25,7 @@ npx wrangler d1 migrations apply saver-local --local --config wrangler.admin.jso
 npm run dev
 ```
 
-O painel exige Access também localmente. Configure as variáveis de desenvolvimento com um emissor/AUD/e-mail válidos e encaminhe o JWT pelo proxy de desenvolvimento da sua aplicação Access. Para uma demonstração descartável, `npx tsx tests/browser-server.ts` serve `http://localhost:8787` e `http://localhost:8788` com dados e identidade fictícios; esse servidor não é implantado nem conectado aos bancos remotos.
+O painel exige Access também localmente. Configure as variáveis de desenvolvimento com um emissor/AUD/e-mail válidos e encaminhe o JWT pelo proxy de desenvolvimento da sua aplicação Access. Para uma demonstração descartável, `npm run demo` serve `http://localhost:8787` e `http://localhost:8788` com dados e identidade fictícios; esse servidor não é implantado nem conectado aos bancos remotos.
 
 ## Homologação e produção
 
@@ -50,7 +50,7 @@ npx wrangler deploy --env staging --config wrangler.admin.jsonc
 
 Em redes com falha IPv6, usar `node --dns-result-order=ipv4first node_modules/wrangler/bin/wrangler.js` no lugar de `npx wrangler`.
 
-O Worker público de homologação usa `saver-public-staging.fazcents.workers.dev`. O painel continua sem emissor, audiência e e-mail até a configuração do Access. A credencial atual não tem permissões de Access; a validação da política com identidade autorizada e não autorizada permanece pendente. Os testes locais não substituem esse aceite.
+O endereço previsto do Worker público de homologação é `saver-public-staging.fazcents.workers.dev`; os Workers ainda não foram publicados. O painel continua sem emissor, audiência e e-mail até a configuração do Access. A credencial atual não tem permissões de Access; a validação da política com identidade autorizada e não autorizada permanece pendente. Os testes locais não substituem esse aceite.
 
 Usar apenas Workers Free, D1 Free, KV Free e Access Free. Nenhum comando do projeto contrata plano, R2 ou excedentes pagos. Confirmar os planos gratuitos da conta antes da publicação, pois o token atual não permite consultar assinaturas. Esgotamento de cota retorna indisponibilidade; não existe fallback pago.
 

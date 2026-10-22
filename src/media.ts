@@ -1,7 +1,8 @@
 import { imageSize } from "image-size";
 import type { Env } from "./env";
-import { product } from "./catalog";
+import { product, visibleProductSql } from "./catalog";
 import { body, boundedBody, HttpError, integer, json, text } from "./http";
+import { validatePng } from "./png";
 
 const MAX_BYTES = 256 * 1024;
 interface Media {
@@ -17,7 +18,7 @@ const reachable = `WITH RECURSIVE used(id) AS (
   UNION SELECT m.previous_id FROM media m JOIN used u ON m.id=u.id WHERE m.previous_id IS NOT NULL
 )`;
 
-function validateImage(bytes: Uint8Array, mime: string) {
+async function validateImage(bytes: Uint8Array, mime: string) {
   try {
     const size = imageSize(bytes);
     const expected: Record<string, string> = {
@@ -42,22 +43,7 @@ function validateImage(bytes: Uint8Array, mime: string) {
     if (mime === "image/webp" && view.getUint32(4, true) + 8 !== bytes.length)
       throw new Error();
     if (mime === "image/png") {
-      // Check complete chunk framing, not just the PNG signature/header.
-      let offset = 8,
-        ended = false;
-      while (offset + 12 <= bytes.length) {
-        const length = view.getUint32(offset);
-        if (offset + 12 + length > bytes.length) throw new Error();
-        const type = new TextDecoder().decode(
-          bytes.subarray(offset + 4, offset + 8),
-        );
-        offset += 12 + length;
-        if (type === "IEND") {
-          ended = true;
-          break;
-        }
-      }
-      if (!ended || offset !== bytes.length) throw new Error();
+      await validatePng(bytes, size.width, size.height);
     }
   } catch {
     throw new HttpError(
@@ -72,7 +58,7 @@ export async function upload(request: Request, env: Env, actor: string) {
   if (!["image/jpeg", "image/png", "image/webp"].includes(mime))
     throw new HttpError(415, "Use uma foto JPEG, PNG ou WebP.");
   const bytes = await boundedBody(request, MAX_BYTES);
-  validateImage(bytes, mime);
+  await validateImage(bytes, mime);
   const id = crypto.randomUUID(),
     token = crypto.randomUUID();
   // Reserve metadata first so quota/database failures cannot create untracked KV objects.
@@ -155,7 +141,7 @@ export async function servePhoto(request: Request, env: Env, id: string) {
     !preview &&
     !(await env.DB.prepare(
       `SELECT 1 FROM products p JOIN categories c ON c.id=p.category_id
-    WHERE p.media_id=? AND p.published=1 AND p.archived=0 AND p.stock>0 AND c.active=1`,
+    WHERE p.media_id=? AND ${visibleProductSql}`,
     )
       .bind(id)
       .first())

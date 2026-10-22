@@ -1,6 +1,10 @@
 import type { Env } from "./env";
 import { body, flag, HttpError, integer, json, text } from "./http";
 
+// All public queries use p (product) and c (category) for the same visibility rule.
+export const visibleProductSql =
+  "p.published=1 AND p.archived=0 AND p.stock>0 AND c.active=1";
+
 export interface Product {
   id: string;
   category_id: string;
@@ -26,12 +30,12 @@ export async function catalog(env: Env) {
   const products = await env.DB.prepare(
     `SELECT p.id,p.name,p.presentation,p.description,p.price_cents,p.category_id,p.media_id
     FROM products p JOIN categories c ON c.id=p.category_id
-    WHERE p.published=1 AND p.archived=0 AND p.stock>0 AND c.active=1
+    WHERE ${visibleProductSql}
     ORDER BY c.sort_order,c.name,c.id,p.sort_order,p.name,p.id`,
   ).all();
   const categories = await env.DB.prepare(
-    `SELECT id,name FROM categories c WHERE active=1 AND EXISTS
-    (SELECT 1 FROM products p WHERE p.category_id=c.id AND p.published=1 AND p.archived=0 AND p.stock>0)
+    `SELECT id,name FROM categories c WHERE EXISTS
+    (SELECT 1 FROM products p WHERE p.category_id=c.id AND ${visibleProductSql})
     ORDER BY sort_order,name,id`,
   ).all();
   return json({ categories: categories.results, products: products.results });
