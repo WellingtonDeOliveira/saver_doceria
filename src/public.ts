@@ -7,7 +7,17 @@ import { publicQuote, submitOrder } from "./orders";
 export default {
   fetch(request: Request, env: Env) {
     return handle(async () => {
-      const path = new URL(request.url).pathname;
+      const url = new URL(request.url);
+      if (
+        url.hostname === "www.saverdoceria.com.br" &&
+        (request.method === "GET" || request.method === "HEAD")
+      ) {
+        url.protocol = "https:";
+        url.hostname = "saverdoceria.com.br";
+        url.port = "";
+        return Response.redirect(url.toString(), 308);
+      }
+      const path = url.pathname;
       if (path === "/api/orders" && request.method === "POST")
         return submitOrder(request, env);
       if (path === "/api/quote" && request.method === "POST")

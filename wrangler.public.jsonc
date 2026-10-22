@@ -29,6 +29,9 @@
       "name": "saver-public-staging",
       "workers_dev": true,
       "preview_urls": false,
+      "vars": {
+        "PUBLIC_ORIGIN": "https://saver-public-staging.fazcents.workers.dev",
+      },
       "d1_databases": [
         {
           "binding": "DB",
@@ -48,6 +51,13 @@
       "name": "saver-public-production",
       "workers_dev": false,
       "preview_urls": false,
+      "vars": {
+        "PUBLIC_ORIGIN": "https://saverdoceria.com.br",
+      },
+      "routes": [
+        { "pattern": "saverdoceria.com.br", "custom_domain": true },
+        { "pattern": "www.saverdoceria.com.br", "custom_domain": true },
+      ],
       "d1_databases": [
         {
           "binding": "DB",
