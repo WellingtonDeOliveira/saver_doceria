@@ -23,3 +23,7 @@
 Fluxo implementado com Workers separados, D1/KV isolados, cadastro vazio, saldo inicial auditável e validação de JWT Access em todas as rotas administrativas, incluindo assets. Banco de homologação migrado; recursos de produção provisionados sem publicar ou migrar o domínio. Testes HTTP e fluxo móvel locais executados. Aceite remoto permanece pendente: a credencial não permite configurar Access nem consultar assinaturas; faltam e-mail autorizado, emissor e audiência da aplicação. Não considerar esta issue integralmente concluída até validar o acesso real e o fluxo em homologação.
 
 Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP dos Workers e navegador móvel, com base de revisão `5d7c6ce`, confirmados pelo usuário. Instruções operacionais e limites em `README.md`.
+
+### Configuração do Access — 2026-10-21
+
+Domínio da equipe informado pelo usuário: `curly-silence-d3a6.cloudflareaccess.com`. Emissor configurado em homologação. Continuam pendentes o e-mail autorizado e o Application Audience (AUD) Tag da aplicação administrativa, além do aceite remoto.
