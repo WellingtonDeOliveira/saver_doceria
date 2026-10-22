@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Saver Doceria · Painel</title>
+    <link rel="icon" href="/assets/logo.jpg" />
+    <link rel="stylesheet" href="/fonts.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/admin.js" type="module"></script>
+  </head>
+  <body class="admin-layout">
+    <aside class="sidebar">
+      <a class="brand" href="#produtos"
+        ><img src="/assets/logo.jpg" alt="Logo Saver Doceria" /><span
+          ><strong>Saver</strong><small>Painel</small></span
+        ></a
+      >
+      <nav aria-label="Painel">
+        <a href="#produtos">Produtos</a><a href="#categorias">Categorias</a
+        ><a href="#estoque">Estoque</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a id="public-link" target="_blank" rel="noopener"
+          >Ver cardápio público ↗</a
+        ><span id="identity"></span>
+      </div>
+    </aside>
+    <main class="admin-main">
+      <div id="notice" class="notice" role="status" aria-live="polite">
+        Carregando o painel…
+      </div>
+      <button id="retry" class="secondary" hidden>Recarregar painel</button>
+      <section id="products-view" hidden>
+        <div class="page-heading">
+          <h1>Produtos</h1>
+          <div class="actions">
+            <button id="clean-media" class="secondary">
+              Limpar fotos não utilizadas</button
+            ><button id="new-product">+ Novo produto</button>
+          </div>
+        </div>
+        <form id="filter-form" class="toolbar">
+          <label
+            >Buscar produto<input
+              name="q"
+              type="search"
+              placeholder="Nome ou apresentação" /></label
+          ><label
+            >Categoria<select
+              name="category"
+              id="filter-category"
+            ></select></label
+          ><label
+            >Situação<select name="state">
+              <option value="">Todos</option>
+              <option value="published">Publicados</option>
+              <option value="hidden">Ocultos</option>
+              <option value="zero">Esgotados</option>
+              <option value="archived">Arquivados</option>
+            </select></label
+          ><button type="submit" class="secondary">Filtrar</button>
+        </form>
+        <div class="panel table-panel">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Situação</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="product-rows"></tbody>
+          </table>
+          <p id="products-empty" class="empty" hidden>
+            Nenhum produto encontrado. Cadastre uma categoria e seu primeiro
+            doce.
+          </p>
+        </div>
+      </section>
+      <section id="categories-view" hidden>
+        <div class="page-heading"><h1>Categorias</h1></div>
+        <p>Desativar uma categoria oculta seus doces sem alterar o estoque.</p>
+        <form id="new-category" class="panel toolbar">
+          <label
+            >Nome da nova categoria<input
+              name="name"
+              required
+              maxlength="120" /></label
+          ><label
+            >Ordem<input
+              name="sort_order"
+              type="number"
+              min="0"
+              max="1000000"
+              step="1"
+              value="0"
+              required /></label
+          ><button type="submit">+ Criar categoria</button>
+        </form>
+        <ol id="category-rows" class="category-list"></ol>
+      </section>
+      <section id="edit-view" hidden>
+        <div class="page-heading">
+          <h1 id="edit-title">Novo produto</h1>
+          <a href="#produtos">Voltar aos produtos</a>
+        </div>
+        <form id="product-form" class="columns">
+          <section class="panel stack">
+            <h2 class="eyebrow">Foto</h2>
+            <img
+              id="photo-preview"
+              class="photo-preview"
+              alt="Prévia da foto"
+              hidden
+            />
+            <p id="photo-empty">Seu doce ainda não tem foto.</p>
+            <label
+              >Selecionar foto<input
+                id="photo-file"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+            /></label>
+            <p class="help">
+              JPEG, PNG ou WebP até 5 MB. Reduzimos para até 1600 × 1600 pixels
+              e 256 KB antes do envio.
+            </p>
+            <p id="photo-info" class="help"></p>
+            <button id="save-photo" class="secondary" type="button" hidden>
+              Enviar e substituir foto
+            </button>
+            <p class="help">
+              Salve o produto antes de enviar a foto. A foto anterior continua
+              disponível durante a distribuição.
+            </p>
+            <p id="photo-status" role="status" aria-live="polite"></p>
+          </section>
+          <section class="panel stack wide">
+            <label>Nome *<input name="name" required maxlength="120" /></label
+            ><label
+              >Apresentação *<input
+                name="presentation"
+                required
+                maxlength="120"
+                placeholder="Ex.: unidade ou caixa com 6" /></label
+            ><label
+              >Descrição<textarea
+                name="description"
+                rows="3"
+                maxlength="2000"
+              ></textarea>
+            </label>
+            <div class="field-grid">
+              <label
+                >Preço (R$) *<input
+                  name="price"
+                  inputmode="decimal"
+                  pattern="[0-9]+([,.][0-9]{1,2})?"
+                  required
+                  placeholder="12,50" /></label
+              ><label
+                >Categoria *<select
+                  name="category_id"
+                  id="product-category"
+                  required
+                ></select></label
+              ><label
+                >Ordem no cardápio<input
+                  name="sort_order"
+                  type="number"
+                  min="0"
+                  max="1000000"
+                  step="1"
+                  value="0"
+                  required
+              /></label>
+            </div>
+            <label id="initial-stock-label"
+              >Estoque inicial *<input
+                name="initial_stock"
+                type="number"
+                min="0"
+                max="1000000"
+                step="1"
+                required
+            /></label>
+            <div id="current-stock" class="stock-balance" hidden></div>
+            <label class="check"
+              ><input name="published" type="checkbox" />Mostrar no
+              cardápio</label
+            >
+            <p class="help">
+              O doce aparece quando tem saldo, a categoria está ativa e ele não
+              está arquivado.
+            </p>
+            <label class="check"
+              ><input name="archived" type="checkbox" />Arquivado</label
+            >
+            <div class="actions end">
+              <a href="#produtos" class="button secondary">Cancelar</a
+              ><button type="submit">Salvar produto</button>
+            </div>
+          </section>
+        </form>
+      </section>
+      <section id="stock-view" hidden>
+        <div class="page-heading"><h1>Estoque</h1></div>
+        <div class="columns">
+          <form id="stock-form" class="panel stack">
+            <h2>Registrar movimentação</h2>
+            <label
+              >Produto<select
+                id="stock-product"
+                name="product_id"
+                required
+              ></select></label
+            ><label
+              >Tipo<select id="stock-kind" name="kind">
+                <option value="entry">Entrada</option>
+                <option value="exit">Saída</option>
+                <option value="correction">Correção</option>
+                <option value="physical_return">Retorno físico</option>
+              </select></label
+            ><label
+              ><span id="quantity-label">Quantidade</span
+              ><input
+                name="quantity"
+                type="number"
+                min="1"
+                max="1000000"
+                step="1"
+                required /></label
+            ><label
+              ><span id="reason-label">Justificativa (opcional)</span
+              ><textarea name="reason" maxlength="500" rows="2"></textarea>
+            </label>
+            <div id="stock-preview" class="stock-balance"></div>
+            <button type="submit">Registrar</button>
+            <p class="help">
+              Saída maior que o saldo é recusada. Zerar o saldo tira o doce do
+              cardápio.
+            </p>
+          </form>
+          <section class="panel wide">
+            <h2>Saldos</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody id="balance-rows"></tbody>
+            </table>
+          </section>
+        </div>
+        <section class="panel history">
+          <h2>Histórico do produto selecionado</h2>
+          <ul id="history" class="history-list"></ul>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

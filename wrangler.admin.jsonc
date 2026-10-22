@@ -1,0 +1,88 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "saver-admin-local",
+  "main": "src/admin.ts",
+  "compatibility_date": "2026-07-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist/admin",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+  },
+  "vars": {
+    "ACCESS_ISSUER": "",
+    "ACCESS_AUD": "",
+    "ADMIN_EMAIL": "",
+    "ADMIN_ORIGIN": "http://localhost:8788",
+    "PUBLIC_ORIGIN": "http://localhost:8787",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "saver-local",
+      "database_id": "00000000-0000-0000-0000-000000000001",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "PHOTOS",
+      "id": "00000000000000000000000000000001",
+    },
+  ],
+  "env": {
+    "staging": {
+      "name": "saver-admin-staging",
+      "workers_dev": false,
+      "preview_urls": false,
+      "vars": {
+        "ACCESS_ISSUER": "",
+        "ACCESS_AUD": "",
+        "ADMIN_EMAIL": "",
+        "ADMIN_ORIGIN": "https://saver-admin-staging.fazcents.workers.dev",
+        "PUBLIC_ORIGIN": "https://saver-public-staging.fazcents.workers.dev",
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "saver-staging",
+          "database_id": "7ba02fae-5a9f-4796-8405-79674cb861f4",
+          "migrations_dir": "migrations",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "PHOTOS",
+          "id": "ea9447d3a2e24c13bbfa1149aaacb8d4",
+        },
+      ],
+    },
+    "production": {
+      "name": "saver-admin-production",
+      "workers_dev": false,
+      "preview_urls": false,
+      "vars": {
+        "ACCESS_ISSUER": "",
+        "ACCESS_AUD": "",
+        "ADMIN_EMAIL": "",
+        "ADMIN_ORIGIN": "https://admin.saverdoceria.shop",
+        "PUBLIC_ORIGIN": "https://saverdoceria.shop",
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "saver-production",
+          "database_id": "d11d60df-0ba4-4168-9427-ded4ecf37b06",
+          "migrations_dir": "migrations",
+        },
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "PHOTOS",
+          "id": "854c0e9ed68d486f9b8a93f08449714b",
+        },
+      ],
+    },
+  },
+}

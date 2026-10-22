@@ -1,0 +1,38 @@
+{
+  "name": "saver-doceria",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "miniflare": {
+      "sharp": "^0.35.5",
+      "undici": "^7.29.1"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "assets": "node scripts/build-assets.mjs",
+    "dev": "npm run assets && wrangler dev --config wrangler.public.jsonc --config wrangler.admin.jsonc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "test:http": "tsx --test tests/catalog.test.ts",
+    "test:browser": "playwright test",
+    "build": "npm run assets && wrangler deploy --dry-run --config wrangler.public.jsonc && wrangler deploy --dry-run --config wrangler.admin.jsonc"
+  },
+  "dependencies": {
+    "image-size": "^2.0.4",
+    "jose": "^6.2.13"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261021.1",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "miniflare": "^4.20260730.0",
+    "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.151.3"
+  }
+}

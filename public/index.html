@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Saver Doceria · Cardápio</title>
+    <link rel="icon" href="/assets/logo.jpg" />
+    <link rel="stylesheet" href="/fonts.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/catalog.js" type="module"></script>
+  </head>
+  <body>
+    <header class="public-header">
+      <div class="container header-inner">
+        <a href="/" class="brand"
+          ><img src="/assets/logo.jpg" alt="Logo Saver Doceria" /><span
+            ><strong>Saver</strong><small>DOCERIA</small></span
+          ></a
+        ><a href="#cardapio" class="button secondary">Ver cardápio</a>
+      </div>
+    </header>
+    <section class="hero container">
+      <div class="hero-copy">
+        <span class="eyebrow pill">Doces artesanais</span>
+        <h1>Um docinho para deixar o seu dia mais leve.</h1>
+        <p>
+          Conheça nossos doces e encontre o seu favorito no cardápio de hoje.
+        </p>
+        <a href="#cardapio" class="button">Escolha os doces</a>
+      </div>
+      <img
+        class="hero-logo"
+        src="/assets/logo.jpg"
+        alt="Saver Doceria: brigadeiro com granulado"
+      />
+    </section>
+    <main id="cardapio" class="container catalog-main">
+      <div class="page-heading">
+        <h2>Cardápio</h2>
+        <div
+          id="categories"
+          class="filters"
+          role="group"
+          aria-label="Categorias"
+        ></div>
+      </div>
+      <p id="status" role="status" aria-live="polite">Carregando os doces…</p>
+      <button id="reload" class="secondary" hidden>Tentar novamente</button>
+      <div id="products" class="catalog-grid"></div>
+    </main>
+    <footer>
+      <div class="container footer-inner">
+        <span class="brand-title">Saver Doceria</span
+        ><span>Doces artesanais, feitos com carinho.</span>
+      </div>
+    </footer>
+  </body>
+</html>
