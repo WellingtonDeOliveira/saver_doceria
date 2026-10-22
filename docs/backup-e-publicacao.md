@@ -61,6 +61,16 @@ Sem reserva no envio, a disponibilidade final é confirmada no atendimento. Inte
 
 ## Estado real conferido em 22/10/2026
 
+### Atualização do painel móvel e segundo administrador
+
+O painel móvel foi publicado em `aa18b60`, com navegação inferior, filtros recolhíveis, cartões de produtos e formulários adaptados. CI `39760172366` e deploys staging `39760407580` / produção `39760185855` aprovados. Validação real em 320/390px e desktop 1024px realizada após publicação.
+
+Após confirmação explícita do usuário, produção permite também sarahnogueira957@gmail.com, com as mesmas permissões administrativas completas, incluindo clientes e backups. A lista `ADMIN_EMAILS` no Worker e a política Access exclusiva de produção `4c90a8ae-c57a-405f-af24-8fa45a1fb05d` correspondem a essa autorização. A política anterior e o acesso atual foram preservados; homologação mantém apenas sua identidade anterior. Para alterar administradores, é necessário manter tanto a lista do Worker quanto as políticas de e-mail exato do Access correspondentes ao ambiente. `ADMIN_EMAIL` continua compatível quando ADMIN_EMAILS não está definida.
+
+O primeiro login de Sarah deve ser realizado por ela no endereço do painel; o agente conferiu a política salva e os testes de autorização, sem acessar a conta de e-mail dela. Registro detalhado em [.scratch/painel-mobile/issues/01-painel-mobile-e-acesso.md](../.scratch/painel-mobile/issues/01-painel-mobile-e-acesso.md).
+
+### Publicação inicial
+
 - Homologação e produção publicadas após autorização explícita do usuário. Zona ativa, NS sue.ns.cloudflare.com/wesley.ns.cloudflare.com conferidos publicamente; Universal SSL ativo, Always Use HTTPS ligado; HTTP apex retorna 301 HTTPS e www retorna 308 ao principal preservando caminho/consulta.
 - Produção: [cardápio](https://saverdoceria.com.br) e [painel](https://admin.saverdoceria.com.br). D1/KV exclusivos inicialmente vazios, migrações 0001–0003 aplicadas, catálogo sazonal não importado. Dados da loja configurados. Item técnico oculto/arquivado e categoria inativa após o ensaio; catálogo final vazio.
 - Access produção a02bbdce-ab80-4b94-90df-ddb2e32f76b4, hostname administrativo inteiro, política de e-mail exato da proprietária. Sessão autorizada real conferida; rotas raiz/index/admin.js/orders/clients/backup sem sessão/JWT inválido retornam 302 Access. Workers.dev produção retorna 404 e previews estão desligados. Origem externa no POST retorna 403; administração no site público retorna 404. Não houve segunda identidade autenticada não autorizada disponível para ensaio; não confundir os testes sem sessão com esse teste adicional.
