@@ -69,6 +69,7 @@
         "ACCESS_ISSUER": "https://curly-silence-d3a6.cloudflareaccess.com",
         "ACCESS_AUD": "b7facd9bf9fecce5d1816328e9eb04ddad2cb161cabceb7b0099006c575bc767",
         "ADMIN_EMAIL": "wellington220100@gmail.com",
+        "ADMIN_EMAILS": "wellington220100@gmail.com,sarahnogueira957@gmail.com",
         "ADMIN_ORIGIN": "https://admin.saverdoceria.com.br",
         "PUBLIC_ORIGIN": "https://saverdoceria.com.br",
       },

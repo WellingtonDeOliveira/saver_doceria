@@ -1,6 +1,12 @@
 import { setupOrders } from "./orders.js";
 import { setupBackup } from "./backup.js";
 const $ = (selector) => document.querySelector(selector);
+const mobileLayout = window.matchMedia("(max-width: 700px)");
+function adaptFilters() {
+  $("#product-filters").open = !mobileLayout.matches;
+}
+adaptFilters();
+mobileLayout.addEventListener("change", adaptFilters);
 const money = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
@@ -149,6 +155,11 @@ async function renderProducts() {
       node("td", String(product.stock)),
       state,
       actions,
+    );
+    ["Produto", "Categoria", "Preço", "Estoque", "Situação", "Ações"].forEach(
+      (label, index) => {
+        row.children[index].dataset.label = label;
+      },
     );
     rows.append(row);
   }

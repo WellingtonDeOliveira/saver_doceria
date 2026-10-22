@@ -17,12 +17,19 @@ const config = adminConfig.env[environment];
 for (const key of [
   "ACCESS_ISSUER",
   "ACCESS_AUD",
-  "ADMIN_EMAIL",
   "ADMIN_ORIGIN",
   "PUBLIC_ORIGIN",
 ])
   if (!config.vars[key])
     throw new Error(`${key} ainda não configurado para ${environment}.`);
+if (
+  !(config.vars.ADMIN_EMAILS || config.vars.ADMIN_EMAIL || "")
+    .split(",")
+    .some((email) => email.trim())
+)
+  throw new Error(
+    `E-mails administrativos ainda não configurados para ${environment}.`,
+  );
 if (
   environment === "production" &&
   (config.workers_dev ||

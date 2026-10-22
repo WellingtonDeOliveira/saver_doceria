@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import sharp from "sharp";
+
 test("celular: cadastro, manutenção pelo teclado, estoque e prévia/troca da foto", async ({
   page,
   context,
@@ -138,4 +139,96 @@ test("celular: cadastro, manutenção pelo teclado, estoque e prévia/troca da f
     )
     .toBe(true);
   expect(errors).toEqual([]);
+});
+
+test("celular: atalhos visíveis, filtros recolhíveis e cartões sem rolagem lateral", async ({
+  page,
+  request,
+}) => {
+  const admin = "http://localhost:8798";
+  const headers = { Origin: admin };
+  const category = await (
+    await request.post(`${admin}/api/categories`, {
+      headers,
+      data: { name: "Cartões mobile" },
+    })
+  ).json();
+  await request.post(`${admin}/api/products`, {
+    headers,
+    data: {
+      category_id: category.id,
+      name: "Trufa artesanal de chocolate com recheio especial para comemorações",
+      presentation: "Caixa com doze unidades de sabores variados",
+      price_cents: 4800,
+      initial_stock: 8,
+      published: false,
+    },
+  });
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(admin);
+    await expect(page.locator("#notice")).toBeHidden();
+    const nav = page.getByRole("navigation", { name: "Painel" });
+    for (const label of [
+      "Produtos",
+      "Categorias",
+      "Estoque",
+      "Pedidos",
+      "Clientes",
+      "Configurações",
+    ]) {
+      const bounds = await nav
+        .getByRole("link", { name: label, exact: true })
+        .boundingBox();
+      expect(bounds).not.toBeNull();
+      expect(bounds!.x).toBeGreaterThanOrEqual(0);
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+      expect(bounds!.width).toBeGreaterThanOrEqual(44);
+    }
+    await expect(
+      page.getByLabel("Buscar produto", { exact: true }),
+    ).toBeHidden();
+    await page.getByText("Buscar e filtrar produtos", { exact: true }).click();
+    await page
+      .getByLabel("Buscar produto", { exact: true })
+      .fill("Trufa artesanal de chocolate");
+    await page.getByRole("button", { name: "Filtrar", exact: true }).click();
+    await expect(page.locator("#product-rows tr")).toHaveCount(1);
+    await page.getByText("Buscar e filtrar produtos", { exact: true }).click();
+    await expect(page.getByRole("cell", { name: /R\$\s*48,00/ })).toBeVisible();
+    await expect(
+      page.getByRole("cell", { name: /^Estoque\s*8$/ }),
+    ).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      )
+      .toBe(true);
+    if (width === 390)
+      await page.screenshot({
+        path: ".wrangler/admin-cards-mobile.png",
+        fullPage: true,
+      });
+    await page.getByRole("button", { name: "Editar", exact: true }).click();
+    await expect(page.getByLabel("Nome *", { exact: true })).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      )
+      .toBe(true);
+    await page
+      .getByRole("link", { name: "Configurações", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Configurações da loja" }),
+    ).toBeVisible();
+    await page.getByRole("link", { name: "Pedidos", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "Pedidos", exact: true }),
+    ).toBeVisible();
+  }
 });

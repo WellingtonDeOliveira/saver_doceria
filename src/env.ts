@@ -5,6 +5,7 @@ export interface Env {
   ACCESS_ISSUER: string;
   ACCESS_AUD: string;
   ADMIN_EMAIL: string;
+  ADMIN_EMAILS?: string;
   ADMIN_ORIGIN: string;
   PUBLIC_ORIGIN: string;
 }

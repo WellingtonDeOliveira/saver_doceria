@@ -37,7 +37,7 @@ Antes de publicar o painel, configurar uma aplicação **Cloudflare Access** que
 
 - `ACCESS_ISSUER`: `https://<equipe>.cloudflareaccess.com`, sem barra final.
 - `ACCESS_AUD`: audiência da aplicação administrativa.
-- `ADMIN_EMAIL`: e-mail autorizado da proprietária.
+- `ADMIN_EMAILS`: lista de e-mails administrativos exatos, separada por vírgula. A configuração deve corresponder às políticas Allow do Cloudflare Access para o mesmo ambiente. Cada identidade autorizada tem acesso administrativo completo, incluindo clientes e backups. `ADMIN_EMAIL` permanece compatível como configuração de uma única identidade quando a lista não está definida. Homologação mantém sua própria lista/política.
 - `ADMIN_ORIGIN`: origem exata do painel, sem barra final.
 - `PUBLIC_ORIGIN`: origem pública do mesmo ambiente.
 

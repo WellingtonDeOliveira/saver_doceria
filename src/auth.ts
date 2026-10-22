@@ -4,10 +4,14 @@ import { HttpError } from "./http";
 
 const keySets = new Map<string, ReturnType<typeof createRemoteJWKSet>>();
 export async function authorize(request: Request, env: Env) {
+  const adminEmails = (env.ADMIN_EMAILS || env.ADMIN_EMAIL || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
   if (
     !env.ACCESS_ISSUER ||
     !env.ACCESS_AUD ||
-    !env.ADMIN_EMAIL ||
+    !adminEmails.length ||
     !env.ADMIN_ORIGIN
   )
     throw new HttpError(503, "Acesso administrativo ainda não configurado.");
@@ -29,7 +33,7 @@ export async function authorize(request: Request, env: Env) {
     });
     if (
       typeof payload.email !== "string" ||
-      payload.email.toLowerCase() !== env.ADMIN_EMAIL.toLowerCase()
+      !adminEmails.includes(payload.email.toLowerCase())
     )
       throw new Error();
     if (

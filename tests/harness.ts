@@ -5,7 +5,11 @@ import { resolve, extname } from "node:path";
 import { generateKeyPair, exportJWK, SignJWT } from "jose";
 
 export async function harness(
-  options: { adminOrigin?: string; publicOrigin?: string } = {},
+  options: {
+    adminOrigin?: string;
+    publicOrigin?: string;
+    adminEmails?: string;
+  } = {},
 ) {
   const adminOrigin = options.adminOrigin ?? "http://localhost:8788";
   const publicOrigin = options.publicOrigin ?? "http://localhost:8787";
@@ -100,6 +104,7 @@ export async function harness(
         ACCESS_ISSUER: issuer,
         ACCESS_AUD: "admin-test",
         ADMIN_EMAIL: "owner@example.com",
+        ADMIN_EMAILS: options.adminEmails ?? "",
         ADMIN_ORIGIN: adminOrigin,
         PUBLIC_ORIGIN: publicOrigin,
       },
