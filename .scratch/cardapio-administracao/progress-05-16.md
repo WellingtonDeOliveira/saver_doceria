@@ -1,5 +1,24 @@
 # Implementação das issues 05–16
 
+## Estado atual — 22/10/2026, após retomada
+
+Este estado substitui os checkpoints históricos abaixo. Issues 05–15 concluídas; issue 16 continua aberta, aguardando ação humana.
+
+- Migrações 0002/0003 aplicadas em staging; público publicado na versão `47d16077-4acc-4590-8811-fd889cd3f433` e painel final `80c035ae-857c-40ea-aa91-b2658d4a9f48`. Não reaplicar por presumir os timeouts antigos. CLI estável: `node --dns-result-order=ipv4first --no-network-family-autoselection node_modules/wrangler/bin/wrangler.js ...`.
+- Fluxo remoto completo validado, inclusive negociação, estoque, entrega/retirada, clientes, fotos e restauração do backup real baixado. Ver `acceptance-issue-16.md`. Dados sintéticos ocultos/arquivados e categoria desativada ao final; nenhuma mensagem WhatsApp enviada.
+- Commit `fecba57` corrige navegação/rótulos do painel e variável pública do CI. Revisões incrementais independentes de standards e spec: zero achados. Destaque Pedidos confirmado remotamente (`aria-current=page`).
+- Branch remota `codex/cardapio-administracao-01-16`, PR draft #2: https://github.com/WellingtonDeOliveira/saver_doceria/pull/2. CI real aprovado no commit `fecba577d01c1009897cfe72cd8be5eaaf3633ea`, run https://github.com/WellingtonDeOliveira/saver_doceria/actions/runs/39717556176.
+- GitHub environments staging/production criados, restritos à main; produção exige aprovação de WellingtonDeOliveira. Variável pública da conta cadastrada nos dois. Nenhum token secret criado.
+- Backup remoto baixado em `.private-backups/staging-validated-05-16/manifest.json`, restaurado em D1/KV locais vazios: fotos, cliente, oito revisões, pedido cancelado e saldo 6 conferidos. Snapshot anterior ao segundo pedido/limpeza; gerar outro antes de produção. Backup pré-migração SQL/KV e DNS em `.private-backups/pre-issues-05-16-staging/`. Nunca publicar essas pastas, ignoradas e com ACL restrita.
+- Access staging validado com sessão autorizada e sem sessão/JWT inválido em todas as rotas verificadas. Segunda identidade autenticada não autorizada ainda não testada.
+- **Bloqueio DNS:** zona saverdoceria.com.br pendente. Registro.br ainda usa a.auto.dns.br/b.auto.dns.br; Cloudflare pede **sue.ns.cloudflare.com** e **wesley.ns.cloudflare.com**. Exige ação no registrador autorizado e verificação de propagação/DNSSEC. Nenhum DNS alterado.
+- **Bloqueio Access/CI:** produção não publicada, Access de produção não criado e configuração Access vazia. Formulário preparado para admin.saverdoceria.com.br, somente wellington220100@gmail.com. Token apenas revisado, não criado: `saver-doceria-github-deploy`, 90 dias até 20/01/2027, Workers Scripts Write, D1 Write, Workers KV Storage Write e Account Settings Read na conta `2121ce905dd87582cafefab587f97b9a`. Permite esses recursos em toda a conta, não somente dois Workers. Destino proposto: secrets GitHub dos dois environments. A política de segurança do navegador exige confirmação no momento da criação de credenciais/acesso; aguardar autorização explícita.
+- Site antigo preservado: GitHub Pages da main remota, pasta /, CNAME saverdoceria.shop, commit `5d7c6cefd5620b1f7496ecbd7092dba90e53e0fa`. **Não enviar main nem fazer merge antes da troca**, pois o novo CNAME mudaria o site antigo. Verificação HTTP independente do domínio antigo teve timeout; não afirmar disponibilidade atual sem nova verificação.
+- Planos Workers Free e Teams Free Base conferidos; nada pago contratado. Não há bloqueio de tokens nesta retomada.
+- Automação `retomar-issues-5-16-da-saver-doceria` deve ficar pausada enquanto depende das ações humanas acima. Após autorização: criar Access/token no escopo revisado, cadastrar secrets sem expor valores, validar segunda identidade, ativar zona, configurar Access de produção e somente publicar após novo backup restaurado. Conferir HTTPS apex/www/admin, rotas alternativas, fluxo móvel e rollback antes de desativar publicação antiga. Não repetir suíte inteira ou migrações sem mudança/falha que justifique.
+
+## Checkpoints históricos (superados pelo estado acima)
+
 Base para revisão: `8768da3cea8b9cab2790b375f09c373d65912c0d` (HEAD ao iniciar).
 Branch autorizada: main. Preservar arquivos de documentação e issues já presentes e não rastreados.
 

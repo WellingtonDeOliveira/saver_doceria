@@ -1,5 +1,11 @@
 # Revisão das issues 05–16
 
+## Incremento e aceite remoto — 22/10/2026
+
+Ambos os revisores conferiram `e354dbf...fecba57`: zero achados de standards e zero defeitos concretos de spec. Navegação/rótulos corrigidos e CI distingue variável pública de secret. Typecheck aprovado após o ajuste.
+
+CI real do PR #2 aprovado em fecba57 (run 39717556176). Migrações/publicação staging, fluxo remoto integrado, Access e restauração do download real conferidos; matriz em `acceptance-issue-16.md`. Painel final publicado `80c035ae-857c-40ea-aa91-b2658d4a9f48`, navegação Pedidos verificada. Produção permanece bloqueada por DNS e autorização de Access/token, mantendo issue 16 aberta.
+
 Base: `8768da3cea8b9cab2790b375f09c373d65912c0d`, HEAD inicial `d2d218c`.
 Comando: `git diff 8768da3cea8b9cab2790b375f09c373d65912c0d...HEAD`.
 Revisores independentes conforme a skill code-review: `/root/review_standards` e `/root/review_spec`.

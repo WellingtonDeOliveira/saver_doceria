@@ -67,6 +67,8 @@ Usar apenas Workers Free, D1 Free, KV Free e Access Free. O painel de assinatura
 
 Os fluxos de solicitação, pedidos e recuperação das issues 05–15 estão implementados. Os procedimentos de backup/restauração, CI, publicação e retorno ao site anterior estão em [docs/backup-e-publicacao.md](docs/backup-e-publicacao.md). A issue 16 só pode ser encerrada após as verificações reais de produção e DNS.
 
+Em 22/10/2026, as migrações 0002/0003 e os dois Workers foram publicados em homologação. O fluxo integrado de entrega/retirada, negociação, ciclo de pedidos, clientes, fotos e estoque foi conferido no navegador, e um backup remoto baixado pelo painel foi restaurado isoladamente. O [PR #2](https://github.com/WellingtonDeOliveira/saver_doceria/pull/2) passou pelo CI. Produção aguarda ativação DNS e autorização de Access/token; a main remota e o site antigo foram preservados. Evidências detalhadas em [.scratch/cardapio-administracao/acceptance-issue-16.md](.scratch/cardapio-administracao/acceptance-issue-16.md).
+
 Além dos contratos abaixo:
 
 - `GET /api/settings` público expõe nome, WhatsApp, mensagem e aviso; `PUT /api/settings` administrativo exige versão.
