@@ -450,6 +450,64 @@ test("retorno físico parcial exige justificativa e referência e repete sem dev
     ).json()) as any[];
     assert.equal(history[0].order_reference, reference);
     assert.equal(history[0].quantity, 1);
+    assert.equal(
+      (
+        await h.request(
+          `/api/orders/${reference}/reopen`,
+          "POST",
+          { version: 4 },
+          { key: crypto.randomUUID() },
+        )
+      ).status,
+      200,
+    );
+    const other = (await (
+      await h.request(
+        "/api/products",
+        "POST",
+        sweet(h.p.category_id, { name: "Outro produto" }),
+      )
+    ).json()) as any;
+    assert.equal(
+      (
+        await h.request(
+          `/api/orders/${reference}`,
+          "PATCH",
+          {
+            version: 5,
+            items: [{ id: other.id, quantity: 1, price_cents: 1800 }],
+          },
+          { key: crypto.randomUUID() },
+        )
+      ).status,
+      200,
+    );
+    const repeated = await h.request(
+      `/api/products/${h.p.id}/stock`,
+      "POST",
+      payload,
+      { key },
+    );
+    assert.equal(repeated.status, 200);
+    const fresh = (await (
+      await h.request(`/api/products/${h.p.id}`)
+    ).json()) as any;
+    assert.equal(
+      (
+        await h.request(
+          `/api/products/${h.p.id}/stock`,
+          "POST",
+          { ...payload, version: fresh.version },
+          { key: crypto.randomUUID() },
+        )
+      ).status,
+      201,
+    );
+    assert.equal(
+      ((await (await h.request(`/api/products/${h.p.id}`)).json()) as any)
+        .stock,
+      8,
+    );
   } finally {
     await h.dispose();
   }

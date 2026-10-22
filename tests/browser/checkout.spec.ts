@@ -169,6 +169,8 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
 }) => {
   const admin = "http://localhost:8798",
     headers = { Origin: admin };
+  const settings = await (await request.get(`${admin}/api/settings`)).json();
+  await request.put(`${admin}/api/settings`,{headers,data:{...settings,whatsapp:"5511999998888"}});
   const c = await (
     await request.post(`${admin}/api/categories`, {
       headers,
@@ -231,14 +233,29 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
   await page.getByLabel("Seu celular com DDD").fill("11977776666");
   await expect(page.locator("#delivery-address")).toBeHidden();
   let lose = true;
+  let releaseSubmission!: () => void;
+  const submissionHeld = new Promise<void>((resolve) => {
+    releaseSubmission = resolve;
+  });
   await page.route("**/api/orders", async (route) => {
     if (lose) {
       lose = false;
+      await submissionHeld;
       await route.fetch();
       await route.abort();
     } else await route.continue();
   });
   await page.getByRole("button", { name: "Registrar solicitação" }).click();
+  await expect(page.locator("#cart-status")).toContainText(
+    "Registrando solicitação",
+  );
+  await expect(
+    page.getByRole("button", {
+      name: "Adicionar Mesmo doce · Avulso",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  releaseSubmission();
   await expect(page.locator("#cart-status")).toContainText("Falha de conexão");
   await expect(page.locator("#order-result")).toBeHidden();
   await page.getByRole("button", { name: "Registrar solicitação" }).click();

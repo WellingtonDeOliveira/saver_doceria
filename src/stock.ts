@@ -46,15 +46,6 @@ export async function stock(
     kind === "physical_return"
       ? text(data.order_reference, "Referência do pedido")
       : null;
-  if (
-    reference &&
-    !(await env.DB.prepare(
-      "SELECT reference FROM orders WHERE reference=? AND EXISTS(SELECT 1 FROM json_each(snapshot,'$.items') WHERE json_extract(value,'$.id')=?)",
-    )
-      .bind(reference, id)
-      .first())
-  )
-    throw new HttpError(400, "Informe um pedido existente com esse produto.");
   const fingerprint = JSON.stringify([
     id,
     kind,
@@ -73,6 +64,22 @@ export async function stock(
       throw new HttpError(409, "Identificador já usado em outra movimentação.");
     return json(prior);
   }
+  if (
+    reference &&
+    !(await env.DB.prepare(
+      `
+    SELECT 1 FROM orders o, json_each(o.original,'$.items') i WHERE o.reference=? AND json_extract(i.value,'$.id')=?
+    UNION ALL SELECT 1 FROM orders o, json_each(o.snapshot,'$.items') i WHERE o.reference=? AND json_extract(i.value,'$.id')=?
+    UNION ALL SELECT 1 FROM order_revisions r, json_each(r.snapshot,'$.items') i WHERE r.reference=? AND json_extract(i.value,'$.id')=? LIMIT 1
+  `,
+    )
+      .bind(reference, id, reference, id, reference, id)
+      .first())
+  )
+    throw new HttpError(
+      400,
+      "Informe um pedido que tenha esse produto em seu histórico.",
+    );
   const delta = kind === "exit" ? -quantity : quantity;
   try {
     await env.DB.prepare(

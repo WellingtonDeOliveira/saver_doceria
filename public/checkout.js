@@ -211,6 +211,19 @@ form.addEventListener("submit", async (event) => {
     /* retries still work in this tab */
   }
   $("#submit-order").disabled = true;
+  const frozenControls = [
+    ...document.querySelectorAll(
+      "#products button,#cart-items button,#cart-items input,#checkout input,#checkout select,#checkout button",
+    ),
+  ].map((control) => [control, control.disabled]);
+  for (const [control] of frozenControls) control.disabled = true;
+  // Keep the reviewed selection stable until the server accepts or rejects it.
+  for (const selector of ["#products", "#cart-items", "#checkout"])
+    $(selector).inert = true;
+  $("#review-cart").disabled = true;
+  $("#accept-changes").disabled = true;
+  $("#cart-status").textContent =
+    "Registrando solicitação… Aguarde o resultado antes de alterar a seleção.";
   try {
     const receipt = await post("/api/orders", payload, pendingOperation.key);
     replaceCart([]);
@@ -232,6 +245,12 @@ form.addEventListener("submit", async (event) => {
     }
     $("#cart-status").textContent = error.message;
   } finally {
+    for (const [control, disabled] of frozenControls)
+      control.disabled = disabled;
+    for (const selector of ["#products", "#cart-items", "#checkout"])
+      $(selector).inert = false;
+    $("#review-cart").disabled = !cart.length;
+    $("#accept-changes").disabled = false;
     $("#submit-order").disabled = false;
   }
 });

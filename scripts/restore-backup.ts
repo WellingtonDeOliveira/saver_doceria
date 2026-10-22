@@ -66,16 +66,7 @@ export async function restoreBackup(
     db.prepare("DELETE FROM settings"),
   ];
   // Insert balances and historical movements verbatim while their effects are suspended.
-  for (const name of [
-    "categories",
-    "media",
-    "products",
-    "clients",
-    "orders",
-    "stock_movements",
-    "order_revisions",
-    "settings",
-  ] as const) {
+  for (const name of backupTables) {
     const columns = (
       await db.prepare(`PRAGMA table_info(${name})`).all<{ name: string }>()
     ).results.map((c) => c.name);
