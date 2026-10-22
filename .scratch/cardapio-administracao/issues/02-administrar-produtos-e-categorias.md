@@ -23,3 +23,7 @@
 Implementado no painel e na API; contratos HTTP e fluxo móvel cobrem os critérios acima. A validação remota integrada depende da configuração Access e publicação da issue 01.
 
 Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP dos Workers e navegador móvel, com base de revisão `5d7c6ce`, confirmados pelo usuário. Instruções operacionais e limites em `README.md`.
+
+### Validação remota — 2026-10-21
+
+Painel de homologação publicado com Access. Cadastro e edição persistiram no D1 após recarregar; produto ocultado e arquivado e categoria desativada pelo painel ao concluir o teste, sem apagar saldo ou histórico. Cardápio público acompanha as alterações. Matriz completa de filtros, ordenação e duplicação permanece verificada pela suíte HTTP e pelo fluxo móvel local.

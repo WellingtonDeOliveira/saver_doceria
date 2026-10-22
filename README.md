@@ -29,7 +29,7 @@ O painel exige Access também localmente. Configure as variáveis de desenvolvim
 
 ## Homologação e produção
 
-Os IDs D1/KV nos dois arquivos Wrangler já apontam a recursos separados da conta usada nesta sessão. A migração de homologação foi aplicada. A produção foi apenas provisionada, sem publicação ou troca de domínio.
+Os IDs D1/KV nos dois arquivos Wrangler apontam a recursos separados da conta usada nesta sessão. A migração de homologação foi aplicada, e os dois Workers de homologação foram publicados e validados. A produção foi apenas provisionada, sem publicação ou troca de domínio.
 
 Domínio de produção atualizado pelo usuário: `saverdoceria.com.br`, com painel em `admin.saverdoceria.com.br`. O `CNAME` e as origens previstas de produção refletem esse endereço. Homologação permanece nos hostnames `*.fazcents.workers.dev`.
 
@@ -52,9 +52,16 @@ npx wrangler deploy --env staging --config wrangler.admin.jsonc
 
 Em redes com falha IPv6, usar `node --dns-result-order=ipv4first node_modules/wrangler/bin/wrangler.js` no lugar de `npx wrangler`.
 
-O endereço previsto do Worker público de homologação é `saver-public-staging.fazcents.workers.dev`; os Workers ainda não foram publicados. O emissor e o e-mail de homologação foram informados pelo usuário; falta a audiência da aplicação administrativa. A credencial atual não tem permissões de Access; a validação da política com identidade autorizada e não autorizada permanece pendente. Os testes locais não substituem esse aceite.
+Ambiente publicado:
 
-Usar apenas Workers Free, D1 Free, KV Free e Access Free. Nenhum comando do projeto contrata plano, R2 ou excedentes pagos. Confirmar os planos gratuitos da conta antes da publicação, pois o token atual não permite consultar assinaturas. Esgotamento de cota retorna indisponibilidade; não existe fallback pago.
+- [Cardápio de homologação](https://saver-public-staging.fazcents.workers.dev/).
+- [Painel de homologação](https://saver-admin-staging.fazcents.workers.dev/), protegido pelo Access.
+- Aplicação Access: `Saver Doceria — Administração (homologação)`, ID `2e28ba3a-ce5c-465b-b0c6-028eda54bc07`, com política Allow exclusivamente para `wellington220100@gmail.com`.
+- Emissor e AUD constam em `wrangler.admin.jsonc`. O AUD é identificador público da aplicação, não uma credencial.
+
+A autenticação real da proprietária foi validada pelo navegador e pelo teste de políticas do Access. Requisições independentes sem sessão à raiz administrativa, a `/index.html` e à mutação `/api/categories` retornaram 302 para o Access, inclusive com cabeçalho JWT inválido; o catálogo público retornou 200. Foi validado o fluxo remoto de cadastro, persistência após recarregar, foto, esgotamento, reposição, histórico e substituição de foto com nova URL. O produto de teste foi ocultado e arquivado; sua categoria foi desativada, preservando o histórico e deixando o cardápio vazio novamente. Não foi usada uma segunda conta autenticada para o teste negativo de e-mail; esse caso permanece coberto pelos testes HTTP locais e pela política de e-mail exato.
+
+Usar apenas Workers Free, D1 Free, KV Free e Access Free. O painel de assinaturas confirmou Workers Free ativo e Teams Free Base antes desta publicação. Nenhum comando do projeto contrata plano, R2 ou excedentes pagos. Esgotamento de cota retorna indisponibilidade; não existe fallback pago.
 
 ## Contratos HTTP
 

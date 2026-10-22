@@ -34,11 +34,11 @@
   "env": {
     "staging": {
       "name": "saver-admin-staging",
-      "workers_dev": false,
+      "workers_dev": true,
       "preview_urls": false,
       "vars": {
         "ACCESS_ISSUER": "https://curly-silence-d3a6.cloudflareaccess.com",
-        "ACCESS_AUD": "",
+        "ACCESS_AUD": "3a9b6e6b40a5624f0ffc0dfe2ce68461dbe58fe30e90d63fb44e6dbdfb624c67",
         "ADMIN_EMAIL": "wellington220100@gmail.com",
         "ADMIN_ORIGIN": "https://saver-admin-staging.fazcents.workers.dev",
         "PUBLIC_ORIGIN": "https://saver-public-staging.fazcents.workers.dev",

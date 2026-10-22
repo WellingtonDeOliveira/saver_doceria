@@ -22,3 +22,7 @@
 Implementado no painel e na API; contratos HTTP e fluxo móvel cobrem os critérios acima. A validação remota integrada depende da configuração Access e publicação da issue 01.
 
 Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP dos Workers e navegador móvel, com base de revisão `5d7c6ce`, confirmados pelo usuário. Instruções operacionais e limites em `README.md`.
+
+### Validação remota — 2026-10-21
+
+Pelo painel autenticado de homologação, registrado saldo inicial 2, saída 2 e entrada 1. Histórico remoto preservou saldos 0 → 2 → 0 → 1, justificativas e responsável. O cardápio ocultou o doce ao esgotar e voltou a exibi-lo após a reposição. Ao final, produto arquivado com saldo 1 e histórico preservado. Repetição, concorrência, correção e falta de saldo permanecem verificadas na suíte HTTP local.

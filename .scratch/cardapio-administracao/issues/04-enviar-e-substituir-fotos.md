@@ -23,3 +23,7 @@
 Implementado no painel e na API; contratos HTTP e fluxo móvel cobrem os critérios acima. A validação remota integrada depende da configuração Access e publicação da issue 01.
 
 Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP dos Workers e navegador móvel, com base de revisão `5d7c6ce`, confirmados pelo usuário. Instruções operacionais e limites em `README.md`.
+
+### Validação remota — 2026-10-21
+
+Pelo painel autenticado de homologação, selecionada imagem de teste (logo já pública), exibidas prévia e compressão de 35 KB para 33 KB, realizado upload no KV e carregada a imagem no cardápio. Substituição gerou outra URL, com imagem novamente carregada. Nenhuma publicação adicional do Worker foi necessária para os uploads. Testes locais cobrem formatos inválidos, falhas, cota, propagação e referências em uso.

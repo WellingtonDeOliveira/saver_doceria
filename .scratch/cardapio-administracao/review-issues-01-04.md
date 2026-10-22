@@ -28,3 +28,11 @@ Standards: 0 violações obrigatórias e 1 observação P3 corrigida. Spec: 2 ac
 - Builds dos dois Workers aprovados em dry-run.
 - Após os ajustes da revisão: testes HTTP de catálogo e mídia e typecheck aprovados; build refeito.
 - `npm audit`: nenhuma vulnerabilidade conhecida na instalação validada.
+
+## Atualização após a revisão: homologação publicada
+
+A pendência de publicação e configuração do Access foi resolvida na continuação autorizada pelo usuário. A aplicação `Saver Doceria — Administração (homologação)` foi criada com Allow para somente `wellington220100@gmail.com`; emissor, AUD e e-mail foram configurados. Workers Free e Teams Free Base foram confirmados pelo painel da conta antes da publicação.
+
+Os Workers de homologação estão publicados. O login real da proprietária e o teste de políticas do Access foram aprovados; requisições independentes sem sessão à página, ao HTML direto e à mutação administrativa foram redirecionadas ao Access. Cadastro, persistência após recarregar, exibição pública, upload e troca de foto, esgotamento/reposição e histórico foram validados remotamente. Dados de teste ficaram ocultos/arquivados, com categoria desativada e histórico preservado. Produção não foi publicada. Não foi usada uma segunda conta autenticada para repetir o teste negativo de e-mail, que segue coberto por HTTP local e pela política exata do Access.
+
+Os apontamentos acima registram a situação na revisão inicial; não há defeito de implementação pendente identificado pelos revisores.
