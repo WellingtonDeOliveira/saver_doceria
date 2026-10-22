@@ -16,3 +16,9 @@
 - [ ] Desativar a publicação antiga somente após confirmar a migração; não importar o catálogo sazonal nem introduzir pagamentos, login de cliente ou serviços fora do escopo.
 - [ ] Registrar verificações finais e limitações aceitas, incluindo ausência de reserva no envio e possível interrupção nas cotas gratuitas.
 
+## Comments
+
+Implementação local das issues 05–15 concluída, com 15 testes HTTP/backup, quatro fluxos móveis, typecheck, builds e revisão em dois agentes. Backup por CLI e download no painel restaurados isoladamente; plano operacional de CI, troca e retorno em `docs/backup-e-publicacao.md`. Workflows versionados, ainda sem secrets/environments configurados no GitHub.
+
+Backup remoto anterior de staging (SQL e duas fotos KV) preservado em pasta privada local. Sessão Access autorizada de staging conferida no navegador. A aplicação das novas migrações falhou por timeout da API Cloudflare; consulta posterior confirmou 0002 e 0003 ainda pendentes. Nenhum Worker novo publicado, DNS ou produção alterados nesta execução. Produção permanece bloqueada pela configuração Access vazia. Continuação agendada após a renovação dos limites; checkpoint detalhado em `../progress-05-16.md`.
+

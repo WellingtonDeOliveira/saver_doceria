@@ -17,6 +17,9 @@ Fronteiras dos testes: HTTP dos Workers e navegador móvel, conforme os critéri
 - WhatsApp real do site antigo em `js/carrinho.js`: `5585986531190`. Pode preencher a configuração pelo painel; nenhum número fica fixo no novo frontend.
 - Produção ainda tem ACCESS_ISSUER/AUD/ADMIN_EMAIL vazios; `scripts/check-deploy.mjs production` bloqueia corretamente. Domínio previsto: saverdoceria.com.br/admin.saverdoceria.com.br. Não trocar DNS sem validar Access/backup/fluxo completo.
 - Workflows preparados em `.github/workflows/`; não houve push nem configuração de secrets/environments no GitHub. `gh` não está instalado. Preserve o site antigo até o aceite.
+- Checkpoint final da janela: commits `d2d218c` e `1c93422` em main. Tentativa de `d1 migrations apply` falhou por timeout antes de publicar qualquer Worker. A consulta posterior confirmou que **ambas** as migrações 0002 e 0003 ainda estão pendentes em staging. Nenhum deploy desta execução foi realizado. Próximo passo: repetir aplicação e publicação staging com IPv4, depois validar por navegador.
+- Uso chegou a 99% da janela de cinco horas; renovação prevista para 22/10 às 00:03:58 de São Paulo. Heartbeat ajustado para minuto 05 de cada hora (primeira retomada prevista 00:05), ativo nesta conversa. Consultar limites de novo; não presumir que uma janela nova elimina o limite semanal.
+- A aba in-app de homologação foi marcada para continuar na próxima execução. Ainda exibe a versão anterior (issues01–04), com sessão autorizada válida.
 - Automação: `retomar-issues-5-16-da-saver-doceria`, heartbeat horário nesta conversa para retomar após limites, sem duplicar trabalho ativo.
 - Publicação real depende de validação completa e acesso Cloudflare/DNS; não marcar migração concluída apenas por testes locais.
 
