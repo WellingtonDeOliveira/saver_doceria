@@ -66,8 +66,8 @@
         "ACCESS_ISSUER": "",
         "ACCESS_AUD": "",
         "ADMIN_EMAIL": "",
-        "ADMIN_ORIGIN": "https://admin.saverdoceria.shop",
-        "PUBLIC_ORIGIN": "https://saverdoceria.shop",
+        "ADMIN_ORIGIN": "https://admin.saverdoceria.com.br",
+        "PUBLIC_ORIGIN": "https://saverdoceria.com.br",
       },
       "d1_databases": [
         {

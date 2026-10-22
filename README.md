@@ -31,6 +31,8 @@ O painel exige Access também localmente. Configure as variáveis de desenvolvim
 
 Os IDs D1/KV nos dois arquivos Wrangler já apontam a recursos separados da conta usada nesta sessão. A migração de homologação foi aplicada. A produção foi apenas provisionada, sem publicação ou troca de domínio.
 
+Domínio de produção atualizado pelo usuário: `saverdoceria.com.br`, com painel em `admin.saverdoceria.com.br`. O `CNAME` e as origens previstas de produção refletem esse endereço. Homologação permanece nos hostnames `*.fazcents.workers.dev`.
+
 Antes de publicar o painel, configurar uma aplicação **Cloudflare Access** que cubra todo o hostname administrativo, com política Allow para somente o e-mail da proprietária. Preencher em `wrangler.admin.jsonc`, no ambiente escolhido:
 
 - `ACCESS_ISSUER`: `https://<equipe>.cloudflareaccess.com`, sem barra final.

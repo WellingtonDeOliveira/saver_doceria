@@ -29,3 +29,5 @@ Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP
 Domínio da equipe informado pelo usuário: `curly-silence-d3a6.cloudflareaccess.com`. Emissor configurado em homologação. Continuam pendentes o e-mail autorizado e o Application Audience (AUD) Tag da aplicação administrativa, além do aceite remoto.
 
 E-mail autorizado informado posteriormente: `wellington220100@gmail.com`, configurado em homologação. AUD ainda não localizado. A consulta pelo navegador chegou à tela de login da Cloudflare; aguardando autenticação do usuário para localizar a aplicação administrativa.
+
+Após login, a lista do Access mostrou somente a aplicação `fazcents.com.br`; a aplicação administrativa Saver ainda não existe. Preparada aplicação separada de homologação, com hostname `saver-admin-staging.fazcents.workers.dev` e política Allow para o e-mail autorizado. Criação ainda pendente. O usuário corrigiu também o domínio de produção para `saverdoceria.com.br`, com painel previsto em `admin.saverdoceria.com.br`; `CNAME` e origens de produção foram atualizados, sem publicar ou alterar DNS.
