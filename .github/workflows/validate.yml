@@ -1,0 +1,26 @@
+name: Validar cardápio
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run assets
+      - run: npm run typecheck
+      - run: npm test
+        env:
+          SAVER_BACKUP_BROWSER: '1'
+      - run: npm run test:browser
+      - run: npm run build

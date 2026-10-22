@@ -18,7 +18,9 @@
       >
       <nav aria-label="Painel">
         <a href="#produtos">Produtos</a><a href="#categorias">Categorias</a
-        ><a href="#estoque">Estoque</a>
+        ><a href="#estoque">Estoque</a><a href="#pedidos">Pedidos</a
+        ><a href="#clientes">Clientes</a
+        ><a href="#configuracoes">Configurações</a>
       </nav>
       <div class="sidebar-bottom">
         <a id="public-link" target="_blank" rel="noopener"
@@ -27,6 +29,58 @@
       </div>
     </aside>
     <main class="admin-main">
+      <section id="orders-view" hidden>
+        <h1>Pedidos</h1>
+        <form id="orders-search" class="toolbar">
+          <label>Referência do pedido<input name="q" type="search" /></label
+          ><button>Buscar pedidos</button>
+        </form>
+        <div id="order-list" class="stack"></div>
+      </section>
+      <section id="order-view" hidden>
+        <a href="#pedidos">Voltar aos pedidos</a>
+        <div id="order-detail" class="stack"></div>
+      </section>
+      <section id="clients-view" hidden>
+        <h1>Clientes</h1>
+        <form id="clients-search" class="toolbar">
+          <label
+            >Celular do cliente<input name="phone" type="tel" required /></label
+          ><button>Buscar cliente</button>
+        </form>
+        <div id="client-detail" class="stack"></div>
+      </section>
+      <section id="settings-view" hidden>
+        <h1>Configurações da loja</h1>
+        <form id="settings-form" class="panel stack">
+          <label
+            >Nome da loja<input name="name" required maxlength="120"
+          /></label>
+          <label
+            >WhatsApp com 55 e DDD<input
+              name="whatsapp"
+              required
+              inputmode="tel"
+              maxlength="20"
+          /></label>
+          <label
+            >Mensagem inicial<textarea
+              name="greeting"
+              maxlength="1000"
+            ></textarea>
+          </label>
+          <label
+            >Aviso público<textarea name="notice" maxlength="2000"></textarea>
+          </label>
+          <button>Salvar configurações</button>
+        </form>
+        <section class="panel stack">
+          <h2>Backup privado</h2>
+          <p>Inclui clientes, pedidos, histórico, estoque e fotos. Guarde o arquivo em pasta privada e faça um ensaio de restauração antes de depender da cópia.</p>
+          <button id="download-backup" type="button">Baixar backup completo</button>
+          <p id="backup-status" role="status" aria-live="polite"></p>
+        </section>
+      </section>
       <div id="notice" class="notice" role="status" aria-live="polite">
         Carregando o painel…
       </div>
@@ -237,6 +291,11 @@
               ><span id="reason-label">Justificativa (opcional)</span
               ><textarea name="reason" maxlength="500" rows="2"></textarea>
             </label>
+            <label id="return-reference-label" hidden
+              >Referência do pedido devolvido<input
+                name="order_reference"
+                maxlength="120"
+            /></label>
             <div id="stock-preview" class="stock-balance"></div>
             <button type="submit">Registrar</button>
             <p class="help">

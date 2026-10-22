@@ -1,7 +1,17 @@
 import { createServer } from "node:http";
 import { harness } from "./harness";
-const h = await harness();
-const servers = [8787, 8788].map((port) =>
+import { restoreBackup } from "../scripts/restore-backup";
+const h = await harness({
+  publicOrigin: "http://localhost:8797",
+  adminOrigin: "http://localhost:8798",
+});
+if (process.env.SAVER_RESTORE_DIR)
+  await restoreBackup(
+    process.env.SAVER_RESTORE_DIR,
+    h.db as unknown as D1Database,
+    h.photos as unknown as KVNamespace,
+  );
+const servers = [8797, 8798].map((port) =>
   createServer(async (req, res) => {
     try {
       const chunks = [];
@@ -11,8 +21,8 @@ const servers = [8787, 8788].map((port) =>
         if (value)
           headers.set(key, Array.isArray(value) ? value.join(",") : value);
       // Test-only reverse proxy: real signed Access JWT, never a bypass in the shipped Worker.
-      if (port === 8788) headers.set("Cf-Access-Jwt-Assertion", h.auth);
-      const worker = port === 8788 ? h.admin : h.publicWorker;
+      if (port === 8798) headers.set("Cf-Access-Jwt-Assertion", h.auth);
+      const worker = port === 8798 ? h.admin : h.publicWorker;
       const response = await worker.fetch(
         `http://localhost:${port}${req.url}`,
         {

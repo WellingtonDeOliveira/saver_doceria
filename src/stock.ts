@@ -42,7 +42,27 @@ export async function stock(
     100,
   );
   const version = integer(data.version, "Versão", 1);
-  const fingerprint = JSON.stringify([id, kind, quantity, reason, version]);
+  const reference =
+    kind === "physical_return"
+      ? text(data.order_reference, "Referência do pedido")
+      : null;
+  if (
+    reference &&
+    !(await env.DB.prepare(
+      "SELECT reference FROM orders WHERE reference=? AND EXISTS(SELECT 1 FROM json_each(snapshot,'$.items') WHERE json_extract(value,'$.id')=?)",
+    )
+      .bind(reference, id)
+      .first())
+  )
+    throw new HttpError(400, "Informe um pedido existente com esse produto.");
+  const fingerprint = JSON.stringify([
+    id,
+    kind,
+    quantity,
+    reason,
+    version,
+    reference,
+  ]);
   const prior = await env.DB.prepare(
     "SELECT * FROM stock_movements WHERE operation_key=?",
   )
@@ -56,8 +76,8 @@ export async function stock(
   const delta = kind === "exit" ? -quantity : quantity;
   try {
     await env.DB.prepare(
-      `INSERT INTO stock_movements(id,product_id,operation_key,fingerprint,kind,quantity,before_stock,after_stock,origin,actor,reason)
-      SELECT ?,id,?,?,?,?,stock,CASE WHEN ?='correction' THEN ? ELSE stock+? END,'manual',?,?
+      `INSERT INTO stock_movements(id,product_id,operation_key,fingerprint,kind,quantity,before_stock,after_stock,origin,actor,reason,order_reference)
+      SELECT ?,id,?,?,?,?,stock,CASE WHEN ?='correction' THEN ? ELSE stock+? END,'manual',?,?,?
       FROM products WHERE id=? AND version=? ON CONFLICT(operation_key) DO NOTHING`,
     )
       .bind(
@@ -73,6 +93,7 @@ export async function stock(
         delta,
         actor,
         reason,
+        reference,
         id,
         version,
       )

@@ -4,11 +4,26 @@ import { categories, products } from "./catalog";
 import { stock } from "./stock";
 import { upload, attachPhoto, cleanMedia, previewPhoto } from "./media";
 import { handle, json } from "./http";
+import { settings } from "./settings";
+import { adminOrders, clients, reviseOrder } from "./orders";
+import { exportBackup } from "./backup";
 export default {
   fetch(request: Request, env: Env) {
     return handle(async () => {
       const actor = await authorize(request, env);
       const path = new URL(request.url).pathname;
+      const backup = path.match(/^\/api\/backup(?:\/media\/([^/]+))?$/);
+      if (backup) return exportBackup(request, env, backup[1]);
+      const orderAction = path.match(
+        /^\/api\/orders\/([^/]+)\/(confirm|complete|cancel|reopen)$/,
+      );
+      if (orderAction)
+        return reviseOrder(request, env, actor, orderAction[1], orderAction[2]);
+      const orderRoute = path.match(/^\/api\/orders(?:\/([^/]+))?$/);
+      if (orderRoute) return adminOrders(request, env, actor, orderRoute[1]);
+      const clientRoute = path.match(/^\/api\/clients(?:\/([^/]+))?$/);
+      if (clientRoute) return clients(request, env, clientRoute[1]);
+      if (path === "/api/settings") return settings(request, env, actor);
       if (path === "/api/session" && request.method === "GET")
         return json({ email: actor, public_origin: env.PUBLIC_ORIGIN });
       if (path === "/api/media" && request.method === "POST")

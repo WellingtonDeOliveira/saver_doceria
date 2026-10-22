@@ -1,6 +1,6 @@
 # Saver Doceria
 
-Cardápio público e painel administrativo das issues 01–04, em dois Cloudflare Workers, com D1 e KV. O novo fluxo começa vazio. O site estático antigo na raiz permanece disponível para a migração futura do domínio (issue 16); os Workers publicam exclusivamente os diretórios `public/` e `admin/`.
+Cardápio público e painel administrativo em dois Cloudflare Workers, com D1 e KV. Inclui configurações, carrinho persistente, revalidação, retirada/entrega com ajuda ViaCEP, solicitações pelo WhatsApp, clientes, negociação e ciclo de pedidos com estoque atômico. O novo fluxo começa vazio. O site estático antigo na raiz permanece disponível para a migração do domínio (issue 16); os Workers publicam exclusivamente os diretórios `public/` e `admin/`.
 
 ## Desenvolvimento e validação
 
@@ -25,7 +25,7 @@ npx wrangler d1 migrations apply saver-local --local --config wrangler.admin.jso
 npm run dev
 ```
 
-O painel exige Access também localmente. Configure as variáveis de desenvolvimento com um emissor/AUD/e-mail válidos e encaminhe o JWT pelo proxy de desenvolvimento da sua aplicação Access. Para uma demonstração descartável, `npm run demo` serve `http://localhost:8787` e `http://localhost:8788` com dados e identidade fictícios; esse servidor não é implantado nem conectado aos bancos remotos.
+O painel exige Access também localmente. Configure as variáveis de desenvolvimento com um emissor/AUD/e-mail válidos e encaminhe o JWT pelo proxy de desenvolvimento da sua aplicação Access. Para uma demonstração descartável, `npm run demo` serve `http://localhost:8797` e `http://localhost:8798` com dados e identidade fictícios; esse servidor não é implantado nem conectado aos bancos remotos.
 
 ## Homologação e produção
 
@@ -65,6 +65,18 @@ Usar apenas Workers Free, D1 Free, KV Free e Access Free. O painel de assinatura
 
 ## Contratos HTTP
 
+Os fluxos de solicitação, pedidos e recuperação das issues 05–15 estão implementados. Os procedimentos de backup/restauração, CI, publicação e retorno ao site anterior estão em [docs/backup-e-publicacao.md](docs/backup-e-publicacao.md). A issue 16 só pode ser encerrada após as verificações reais de produção e DNS.
+
+Além dos contratos abaixo:
+
+- `GET /api/settings` público expõe nome, WhatsApp, mensagem e aviso; `PUT /api/settings` administrativo exige versão.
+- `POST /api/quote` revalida de 1 a 50 produtos e até 1000 unidades por produto. Valores são recalculados em centavos; diferenças exigem revisão explícita.
+- `POST /api/orders` público exige origem do site, chave UUID v4 de idempotência, nome, celular brasileiro com DDD, modalidade e carrinho revisado; entrega exige endereço. Limite de 10 novas solicitações por IP por hora, sem reserva/baixa. Retorna somente referência e mensagem com os dados do próprio envio.
+- `GET /api/orders[/:reference]` e `PATCH /api/orders/:reference` administrativos consultam e negociam; `POST /api/orders/:reference/{confirm,complete,cancel,reopen}` aplica o ciclo. Alterações exigem versão e chave UUID de idempotência; original e revisões permanecem preservados.
+- `GET /api/clients?phone=...` e `GET /api/clients/:id` são exclusivos do administrador.
+- `GET /api/backup` e `GET /api/backup/media/:id` são exclusivos do administrador e não usam cache. A restauração executável ocorre somente em ambiente local vazio.
+- Retorno físico em `/api/products/:id/stock` exige também `order_reference`, vinculando a entrada justificada a um pedido com aquele produto.
+
 | Interface | Comportamento |
 |---|---|
 | `GET /api/catalog` (público) | Categorias úteis e produtos publicados, não arquivados, com saldo positivo e categoria ativa; sem dados administrativos |
@@ -90,4 +102,4 @@ A limpeza pelo painel remove até 50 uploads órfãos com mais de 24 horas, ou r
 
 ## Design
 
-Implementação baseada em `docs/design/Saver Doceria — Design.html`: Fraunces para títulos, DM Sans para interface, paleta chocolate/rosa, cartões arredondados, navegação lateral no desktop e formulários acessíveis no celular. Logo e fontes são locais; a licença das fontes extraída da referência está em `public/assets/FONT-LICENSE.txt`. Carrinho, solicitações e pedidos continuam nas issues seguintes.
+Implementação baseada em `docs/design/Saver Doceria — Design.html`: Fraunces para títulos, DM Sans para interface, paleta chocolate/rosa, cartões arredondados, navegação lateral no desktop e formulários acessíveis no celular. Logo e fontes são locais; a licença das fontes extraída da referência está em `public/assets/FONT-LICENSE.txt`. Carrinho, solicitações e pedidos seguem os mesmos padrões visuais.

@@ -6,7 +6,7 @@ test("celular: cadastro, manutenção pelo teclado, estoque e prévia/troca da f
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("http://localhost:8788");
+  await page.goto("http://localhost:8798");
   await page.getByRole("link", { name: "Categorias", exact: true }).click();
   await page.getByLabel("Nome da nova categoria").fill("Doces");
   await page.getByRole("button", { name: "Criar categoria" }).click();
@@ -35,7 +35,7 @@ test("celular: cadastro, manutenção pelo teclado, estoque e prévia/troca da f
     "Brigadeiro",
   );
   const publicPage = await context.newPage();
-  await publicPage.goto("http://localhost:8787");
+  await publicPage.goto("http://localhost:8797");
   await expect(
     publicPage.getByRole("heading", { name: "Brigadeiro" }),
   ).toBeVisible();

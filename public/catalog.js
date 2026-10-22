@@ -1,3 +1,4 @@
+import { addToCart } from "./cart.js";
 const status = document.querySelector("#status");
 const products = document.querySelector("#products");
 const categories = document.querySelector("#categories");
@@ -59,6 +60,14 @@ function render() {
       element("span", money.format(product.price_cents / 100), "price"),
     );
     card.append(photo, copy);
+    const add = element("button", "Adicionar");
+    add.type = "button";
+    add.setAttribute(
+      "aria-label",
+      `Adicionar ${product.name} · ${product.presentation}`,
+    );
+    add.addEventListener("click", () => addToCart(product));
+    copy.append(add);
     products.append(card);
   }
   status.hidden = !!catalog.products.length;
@@ -84,3 +93,16 @@ async function load() {
 }
 reload.addEventListener("click", load);
 load();
+fetch("/api/settings", { cache: "no-store" })
+  .then(async (response) => {
+    if (!response.ok) throw new Error();
+    const settings = await response.json();
+    document.querySelector("#store-name").textContent = settings.name;
+    document.querySelector(".brand-title").textContent = settings.name;
+    document.querySelector("#store-notice").textContent = settings.notice;
+    document.title = `${settings.name} · Cardápio`;
+  })
+  .catch(() => {
+    document.querySelector("#store-notice").textContent =
+      "Avisos da loja indisponíveis. Tente recarregar.";
+  });

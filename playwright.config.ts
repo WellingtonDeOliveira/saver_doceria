@@ -10,7 +10,7 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run assets && npx tsx tests/browser-server.ts",
-    url: "http://localhost:8787/api/catalog",
+    url: "http://localhost:8797/api/catalog",
     reuseExistingServer: false,
     timeout: 30000,
   },

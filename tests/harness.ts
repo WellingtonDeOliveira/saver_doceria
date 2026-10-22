@@ -4,7 +4,11 @@ import { readFile } from "node:fs/promises";
 import { resolve, extname } from "node:path";
 import { generateKeyPair, exportJWK, SignJWT } from "jose";
 
-export async function harness() {
+export async function harness(
+  options: { adminOrigin?: string; publicOrigin?: string } = {},
+) {
+  const adminOrigin = options.adminOrigin ?? "http://localhost:8788";
+  const publicOrigin = options.publicOrigin ?? "http://localhost:8787";
   const { privateKey, publicKey } = await generateKeyPair("RS256");
   const jwk = {
     ...(await exportJWK(publicKey)),
@@ -96,8 +100,8 @@ export async function harness() {
         ACCESS_ISSUER: issuer,
         ACCESS_AUD: "admin-test",
         ADMIN_EMAIL: "owner@example.com",
-        ADMIN_ORIGIN: "http://localhost:8788",
-        PUBLIC_ORIGIN: "http://localhost:8787",
+        ADMIN_ORIGIN: adminOrigin,
+        PUBLIC_ORIGIN: publicOrigin,
       },
       outboundService: async (req: Request) =>
         req.url === `${issuer}/cdn-cgi/access/certs`
@@ -123,6 +127,17 @@ export async function harness() {
       statements.slice(triggerIndex).join(";\n").trim().replace(/;$/, ""),
     )
     .run();
+  const ordersMigration = await readFile("migrations/0002_orders.sql", "utf8");
+  await db.batch(
+    ordersMigration
+      .split(/;\s*(?:\r?\n|$)/)
+      .filter((s) => s.trim())
+      .map((s) => db.prepare(s)),
+  );
+  const guards = await readFile("migrations/0003_order_guards.sql", "utf8");
+  for (const statement of guards.split("-- statement"))
+    if (statement.trim())
+      await db.prepare(statement.trim().replace(/;$/, "")).run();
   const admin = await mf.getWorker("admin");
   const publicWorker = await mf.getWorker("public");
   async function request(
@@ -132,13 +147,13 @@ export async function harness() {
     options: { token?: string | null; origin?: string; key?: string } = {},
   ) {
     const headers: Record<string, string> = {
-      Origin: options.origin ?? "http://localhost:8788",
+      Origin: options.origin ?? adminOrigin,
     };
     if (options.token !== null)
       headers["Cf-Access-Jwt-Assertion"] = options.token ?? auth;
     if (data !== undefined) headers["Content-Type"] = "application/json";
     if (options.key) headers["Idempotency-Key"] = options.key;
-    return admin.fetch(`http://localhost:8788${path}`, {
+    return admin.fetch(`${adminOrigin}${path}`, {
       method,
       headers,
       body: data === undefined ? undefined : JSON.stringify(data),

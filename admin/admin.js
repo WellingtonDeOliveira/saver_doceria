@@ -1,3 +1,5 @@
+import { setupOrders } from "./orders.js";
+import { setupBackup } from "./backup.js";
 const $ = (selector) => document.querySelector(selector);
 const money = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -236,7 +238,16 @@ async function refresh() {
   await renderProducts();
 }
 function showView(name) {
-  for (const view of ["products", "categories", "edit", "stock"])
+  for (const view of [
+    "products",
+    "categories",
+    "edit",
+    "stock",
+    "settings",
+    "orders",
+    "order",
+    "clients",
+  ])
     $(`#${view}-view`).hidden = view !== name;
   const href =
     name === "edit"
@@ -254,9 +265,33 @@ function showView(name) {
 async function route() {
   if (!session) return;
   const hash = location.hash;
+  if (hash === "#pedidos") {
+    showView("orders");
+    await orderViews.list();
+    return;
+  }
+  if (hash === "#clientes") {
+    showView("clients");
+    return;
+  }
+  if (hash.startsWith("#pedido/")) {
+    showView("order");
+    await orderViews.detail(decodeURIComponent(hash.slice(8)));
+    return;
+  }
+  if (hash === "#configuracoes") {
+    const saved = await api("/api/settings");
+    const form = $("#settings-form");
+    form.dataset.version = saved.version;
+    for (const name of ["name", "whatsapp", "greeting", "notice"])
+      form.elements[name].value = saved[name];
+    showView("settings");
+    return;
+  }
   if (hash === "#categorias") showView("categories");
   else if (hash === "#estoque") {
     showView("stock");
+    await refresh();
     await loadHistory();
   } else if (hash === "#produto" && editing !== undefined) showView("edit");
   else showView("products");
@@ -506,6 +541,8 @@ function stockPreview() {
     : "Quantidade";
   form.elements.quantity.min = correction ? "0" : "1";
   const required = correction || kind === "physical_return";
+  $("#return-reference-label").hidden = kind !== "physical_return";
+  form.elements.order_reference.required = kind === "physical_return";
   form.elements.reason.required = required;
   $("#reason-label").textContent = required
     ? "Justificativa *"
@@ -547,10 +584,13 @@ async function loadHistory() {
       ),
       node(
         "span",
-        movement.reason ||
-          (movement.origin === "product_creation"
-            ? "Cadastro do produto"
-            : "Manual"),
+        (movement.order_reference
+          ? `Pedido ${movement.order_reference} · `
+          : "") +
+          (movement.reason ||
+            (movement.origin === "product_creation"
+              ? "Cadastro do produto"
+              : "Manual")),
       ),
       node(
         "small",
@@ -575,6 +615,9 @@ $("#stock-form").addEventListener(
       quantity: Number(form.elements.quantity.value),
       reason: form.elements.reason.value,
       version: p.version,
+      ...(form.elements.kind.value === "physical_return"
+        ? { order_reference: form.elements.order_reference.value }
+        : {}),
     };
     const signature = JSON.stringify([p.id, payload]);
     if (stockOperation?.signature !== signature)
@@ -610,4 +653,21 @@ async function start() {
 }
 $("#retry").addEventListener("click", start);
 window.addEventListener("hashchange", guarded(route));
+$("#settings-form").addEventListener(
+  "submit",
+  guarded(async () => {
+    const form = $("#settings-form");
+    const saved = await api("/api/settings", {
+      method: "PUT",
+      data: {
+        ...Object.fromEntries(new FormData(form)),
+        version: Number(form.dataset.version),
+      },
+    });
+    form.dataset.version = saved.version;
+    notify("Configurações salvas.", "success");
+  }),
+);
+const orderViews = setupOrders({ api, guarded, notify, node, money, date });
+setupBackup({ api, guarded });
 start();
