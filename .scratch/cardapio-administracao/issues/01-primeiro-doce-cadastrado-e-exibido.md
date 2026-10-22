@@ -27,3 +27,5 @@ Frontend segue `docs/design/Saver Doceria — Design.html`. Pontos de teste HTTP
 ### Configuração do Access — 2026-10-21
 
 Domínio da equipe informado pelo usuário: `curly-silence-d3a6.cloudflareaccess.com`. Emissor configurado em homologação. Continuam pendentes o e-mail autorizado e o Application Audience (AUD) Tag da aplicação administrativa, além do aceite remoto.
+
+E-mail autorizado informado posteriormente: `wellington220100@gmail.com`, configurado em homologação. AUD ainda não localizado. A consulta pelo navegador chegou à tela de login da Cloudflare; aguardando autenticação do usuário para localizar a aplicação administrativa.

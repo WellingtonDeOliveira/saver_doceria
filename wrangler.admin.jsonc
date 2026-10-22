@@ -39,7 +39,7 @@
       "vars": {
         "ACCESS_ISSUER": "https://curly-silence-d3a6.cloudflareaccess.com",
         "ACCESS_AUD": "",
-        "ADMIN_EMAIL": "",
+        "ADMIN_EMAIL": "wellington220100@gmail.com",
         "ADMIN_ORIGIN": "https://saver-admin-staging.fazcents.workers.dev",
         "PUBLIC_ORIGIN": "https://saver-public-staging.fazcents.workers.dev",
       },
