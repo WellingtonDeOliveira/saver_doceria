@@ -1,5 +1,6 @@
 Status: ready-for-agent
 Type: task
+Execution: resolved
 
 # Foto no cadastro de produto
 
@@ -30,4 +31,17 @@ Manter validações, compressão e limites gratuitos existentes.
   locais descartáveis em 23/10/2026 (1 foto, 1 pedido e 1 cliente). Cópia privada
   em `.private-backups/pre-foto-cadastro-2026-10-23/backup.json` (ignorada pelo Git).
 - Configurações staging/production verificadas pelo guard existente.
-- Publicação pendente.
+- CI GitHub aprovado: execução 40028442926, commit `aae99ed`.
+- Homologação publicada e verificada pelo workflow 40028641996.
+- Workflow de produção 40028554771 cancelado por ficar retido na instalação
+  das ferramentas do Playwright. A mesma versão validada foi publicada pelo
+  Wrangler oficial, com OAuth existente, após conferir ausência de migrações
+  pendentes. Worker administrativo de produção:
+  `db2358e8-be52-4cbc-944c-9f28a23250ce`.
+- Workers Free e Teams Free Base conferidos na conta; Access cobre o hostname
+  administrativo inteiro e mantém somente os dois e-mails autorizados.
+- Conferência autenticada em produção: novo cadastro permite selecionar foto;
+  arquivo de 2000 × 1800 pixels foi preparado de 53 KB para 14 KB, com prévia
+  pronta antes de salvar. Nenhum produto de ensaio foi gravado em produção.
+- Catálogo público HTTP 200; painel, admin.js e API administrativa sem sessão
+  continuam redirecionando ao Access (302).
