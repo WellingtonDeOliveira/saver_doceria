@@ -27,6 +27,7 @@ let categories = [],
 let stockOperation,
   loadingSequence = 0,
   photoSequence = 0;
+let preparingPhoto = false;
 
 function node(tag, text, className) {
   const item = document.createElement(tag);
@@ -311,6 +312,7 @@ async function route() {
 }
 function resetPhoto() {
   photoSequence++;
+  preparingPhoto = false;
   if (objectUrl) URL.revokeObjectURL(objectUrl);
   objectUrl = undefined;
   preparedPhoto = undefined;
@@ -320,10 +322,10 @@ function resetPhoto() {
   $("#photo-status").textContent = "";
   $("#save-photo").hidden = true;
 }
-async function openProduct(id, duplicate = false) {
+async function openProduct(id, duplicate = false, preservePhoto = false) {
   const form = $("#product-form");
   form.reset();
-  resetPhoto();
+  if (!preservePhoto) resetPhoto();
   editing = id ? await api(`/api/products/${id}`) : null;
   duplicating = duplicate;
   $("#edit-title").textContent = duplicate
@@ -357,7 +359,13 @@ async function openProduct(id, duplicate = false) {
   $("#photo-empty").hidden = !!editing?.media_id && !duplicate;
   if (editing?.media_id && !duplicate)
     $("#photo-preview").src = `/api/media/${editing.media_id}/preview`;
-  $("#photo-file").disabled = isNew;
+  $("#photo-file").disabled = false;
+  if (preservePhoto && objectUrl) {
+    $("#photo-preview").src = objectUrl;
+    $("#photo-preview").hidden = false;
+    $("#photo-empty").hidden = true;
+    $("#save-photo").hidden = false;
+  }
   location.hash = "#produto";
   showView("edit");
   form.elements.name.focus();
@@ -398,6 +406,10 @@ $("#new-category").addEventListener(
 $("#product-form").addEventListener(
   "submit",
   guarded(async () => {
+    if (preparingPhoto)
+      throw new Error(
+        "Aguarde a preparação da foto antes de salvar o produto.",
+      );
     notify("Salvando produto…");
     const form = $("#product-form"),
       fields = form.elements;
@@ -423,9 +435,25 @@ $("#product-form").addEventListener(
         ? `/api/products/${editing.id}`
         : "/api/products";
     const saved = await api(url, { method: isNew ? "POST" : "PATCH", data });
+    const hasPhoto = !!preparedPhoto;
+    if (location.hash === "#produto")
+      await openProduct(saved.id, false, hasPhoto);
+    if (hasPhoto) {
+      try {
+        await savePhoto();
+      } catch (error) {
+        throw new Error(
+          `Produto salvo, mas a foto não foi salva. ${error.message} Use “Enviar e substituir foto” para tentar novamente.`,
+        );
+      }
+    }
     await refresh();
-    if (location.hash === "#produto") await openProduct(saved.id);
-    notify("Produto salvo. Você já pode enviar a foto.", "success");
+    notify(
+      hasPhoto
+        ? "Produto e foto salvos."
+        : "Produto salvo. Você já pode enviar a foto.",
+      "success",
+    );
   }),
 );
 
@@ -464,6 +492,7 @@ $("#photo-file").addEventListener(
     const file = $("#photo-file").files[0];
     if (!file) return;
     const sequence = ++photoSequence;
+    preparingPhoto = true;
     $("#photo-status").textContent = "Preparando a foto…";
     let photo;
     try {
@@ -472,6 +501,8 @@ $("#photo-file").addEventListener(
       if (sequence === photoSequence)
         $("#photo-status").textContent = error.message;
       return;
+    } finally {
+      if (sequence === photoSequence) preparingPhoto = false;
     }
     if (sequence !== photoSequence) return;
     preparedPhoto = photo;
@@ -481,67 +512,67 @@ $("#photo-file").addEventListener(
     $("#photo-empty").hidden = true;
     $("#photo-info").textContent =
       `${file.name} · original ${Math.ceil(file.size / 1024)} KB → envio ${Math.ceil(photo.size / 1024)} KB`;
-    $("#photo-status").textContent = "Prévia pronta. Envie para salvar a foto.";
-    $("#save-photo").hidden = false;
+    $("#photo-status").textContent =
+      "Prévia pronta. Salve o produto para salvar também a foto.";
+    $("#save-photo").hidden = !editing || duplicating;
   }),
 );
 function resetPreparedPhoto() {
   photoSequence++;
+  preparingPhoto = false;
   preparedPhoto = undefined;
   stagedPhoto = undefined;
   if (objectUrl) URL.revokeObjectURL(objectUrl);
   objectUrl = undefined;
   $("#save-photo").hidden = true;
 }
-$("#save-photo").addEventListener(
-  "click",
-  guarded(async () => {
-    if (!preparedPhoto || !editing) return;
-    const sequence = photoSequence,
-      productId = editing.id,
-      version = editing.version;
-    notify("Enviando foto…");
-    $("#photo-status").textContent = "Enviando e verificando a distribuição…";
-    try {
-      const staged =
-        stagedPhoto ??
-        (await api("/api/media", {
-          method: "POST",
-          data: preparedPhoto,
-          raw: true,
-        }));
-      if (sequence !== photoSequence) return;
-      stagedPhoto = staged;
-      await new Promise((resolve, reject) => {
-        const image = new Image();
-        image.onload = resolve;
-        image.onerror = () =>
-          reject(
-            new Error(
-              "A foto ainda está em distribuição. A anterior continua salva. Tente novamente em instantes.",
-            ),
-          );
-        image.src = staged.preview_url;
-      });
-      if (sequence !== photoSequence) return;
-      const saved = await api(`/api/products/${productId}/photo`, {
-        method: "PUT",
-        data: { media_id: staged.id, version },
-      });
-      if (sequence !== photoSequence) return;
-      editing = saved;
-      $("#photo-file").value = "";
-      resetPreparedPhoto();
-      $("#photo-status").textContent =
-        "Foto salva. A distribuição pode levar alguns instantes; a anterior permanece como alternativa.";
-      await refresh();
-      notify("Foto salva.", "success");
-    } catch (error) {
-      $("#photo-status").textContent = error.message;
-      throw error;
-    }
-  }),
-);
+async function savePhoto() {
+  if (!preparedPhoto || !editing) return;
+  const sequence = photoSequence,
+    productId = editing.id,
+    version = editing.version;
+  notify("Enviando foto…");
+  $("#photo-status").textContent = "Enviando e verificando a distribuição…";
+  try {
+    const staged =
+      stagedPhoto ??
+      (await api("/api/media", {
+        method: "POST",
+        data: preparedPhoto,
+        raw: true,
+      }));
+    if (sequence !== photoSequence) return;
+    stagedPhoto = staged;
+    await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = resolve;
+      image.onerror = () =>
+        reject(
+          new Error(
+            "A foto ainda está em distribuição. A anterior continua salva. Tente novamente em instantes.",
+          ),
+        );
+      image.src = staged.preview_url;
+    });
+    if (sequence !== photoSequence) return;
+    const saved = await api(`/api/products/${productId}/photo`, {
+      method: "PUT",
+      data: { media_id: staged.id, version },
+    });
+    if (sequence !== photoSequence) return;
+    editing = saved;
+    $("#photo-file").value = "";
+    resetPreparedPhoto();
+    $("#photo-status").textContent =
+      "Foto salva. A distribuição pode levar alguns instantes; a anterior permanece como alternativa.";
+    await refresh();
+    notify("Foto salva.", "success");
+  } catch (error) {
+    $("#photo-status").textContent = error.message;
+    throw error;
+  }
+}
+$("#save-photo").addEventListener("click", guarded(savePhoto));
 
 function stockPreview() {
   const form = $("#stock-form"),
