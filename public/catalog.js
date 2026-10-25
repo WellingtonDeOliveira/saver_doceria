@@ -1,4 +1,5 @@
 import { addToCart } from "./cart.js";
+import { openDialog } from "./dialog.js";
 const status = document.querySelector("#status");
 const products = document.querySelector("#products");
 const categories = document.querySelector("#categories");
@@ -9,6 +10,62 @@ const money = new Intl.NumberFormat("pt-BR", {
 });
 let catalog,
   selected = "";
+let detailProduct;
+const dialog = document.querySelector("#product-dialog");
+document
+  .querySelector("#close-product")
+  .addEventListener("click", () => dialog.close());
+document.querySelector("#detail-add").addEventListener("click", () => {
+  const added = addToCart(detailProduct);
+  document.querySelector("#product-feedback").textContent = added
+    ? `${detailProduct.name} adicionado ao carrinho.`
+    : "Limite do carrinho atingido.";
+});
+document.querySelector("#detail-cart").addEventListener("click", () => {
+  dialog.close();
+  document.querySelector("#open-cart").click();
+});
+function showProduct(product) {
+  detailProduct = product;
+  const details = document.querySelector("#product-details");
+  const photo = product.media_id
+    ? element("img")
+    : element("span", "S", "photo-placeholder");
+  photo.classList.add("detail-photo");
+  if (product.media_id) {
+    photo.src = `/media/${product.media_id}`;
+    photo.alt = product.name;
+    photo.addEventListener(
+      "error",
+      () =>
+        photo.replaceWith(
+          element("span", "S", "photo-placeholder detail-photo"),
+        ),
+      { once: true },
+    );
+  }
+  const title = element("h2", product.name);
+  title.id = "product-title";
+  details.replaceChildren(
+    photo,
+    element(
+      "span",
+      catalog.categories.find((c) => c.id === product.category_id)?.name,
+      "eyebrow",
+    ),
+    title,
+    element("p", product.presentation),
+    element(
+      "p",
+      product.description ||
+        "Um doce artesanal preparado com carinho pela Saver Doceria.",
+      "detail-description",
+    ),
+    element("strong", money.format(product.price_cents / 100), "price"),
+  );
+  document.querySelector("#product-feedback").textContent = "";
+  openDialog(dialog);
+}
 function element(tag, text, className) {
   const node = document.createElement(tag);
   if (text !== undefined) node.textContent = text;
@@ -32,6 +89,14 @@ function render() {
     (p) => !selected || p.category_id === selected,
   )) {
     const card = element("article", undefined, "sweet-card");
+    const detail = element("button", undefined, "sweet-detail");
+    detail.type = "button";
+    detail.setAttribute(
+      "aria-label",
+      `Ver detalhes de ${product.name} · ${product.presentation}`,
+    );
+    detail.setAttribute("aria-haspopup", "dialog");
+    detail.addEventListener("click", () => showProduct(product));
     let photo = element("span", "S", "photo-placeholder");
     photo.setAttribute("aria-hidden", "true");
     if (product.media_id) {
@@ -59,7 +124,8 @@ function render() {
       element("p", product.description),
       element("span", money.format(product.price_cents / 100), "price"),
     );
-    card.append(photo, copy);
+    detail.append(photo, copy);
+    card.append(detail);
     const add = element("button", "Adicionar");
     add.type = "button";
     add.setAttribute(
@@ -67,7 +133,7 @@ function render() {
       `Adicionar ${product.name} · ${product.presentation}`,
     );
     add.addEventListener("click", () => addToCart(product));
-    copy.append(add);
+    card.append(add);
     products.append(card);
   }
   status.hidden = !!catalog.products.length;

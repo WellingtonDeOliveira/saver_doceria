@@ -1,5 +1,11 @@
 import { test, expect } from "@playwright/test";
 
+test.beforeEach(async ({ context }) => {
+  await context.route("https://wa.me/**", (route) =>
+    route.fulfill({ body: "WhatsApp simulado: nenhuma mensagem enviada." }),
+  );
+});
+
 test("celular: configurações, carrinho persistente, revisão, entrega manual, WhatsApp e ciclo administrativo", async ({
   page,
   context,
@@ -50,6 +56,7 @@ test("celular: configurações, carrinho persistente, revisão, entrega manual, 
     })
     .click();
   await publicPage.reload();
+  await publicPage.getByRole("button", { name: /Abrir carrinho/ }).click();
   await expect(
     publicPage.getByLabel("Quantidade de Trufa checkout · Unidade"),
   ).toHaveValue("1");
@@ -59,7 +66,7 @@ test("celular: configurações, carrinho persistente, revisão, entrega manual, 
     data: { ...fields, published: true, archived: false, price_cents: 600 },
   });
   await publicPage
-    .getByRole("button", { name: "Revisar carrinho", exact: true })
+    .getByRole("button", { name: "Confirmar carrinho", exact: true })
     .click();
   await expect(publicPage.locator("#cart-status")).toContainText(
     "preço atualizado",
@@ -69,12 +76,15 @@ test("celular: configurações, carrinho persistente, revisão, entrega manual, 
     .getByRole("button", { name: "Aceitar alterações do carrinho" })
     .click();
   await publicPage
-    .getByRole("button", { name: "Revisar carrinho", exact: true })
+    .getByRole("button", { name: "Confirmar carrinho", exact: true })
     .click();
   await publicPage
     .getByLabel("Seu nome", { exact: true })
     .fill("Cliente móvel");
   await publicPage.getByLabel("Seu celular com DDD").fill("11988887777");
+  await publicPage
+    .getByRole("button", { name: "Continuar", exact: true })
+    .click();
   await publicPage
     .getByRole("combobox", { name: "Modalidade", exact: true })
     .selectOption("delivery");
@@ -88,9 +98,19 @@ test("celular: configurações, carrinho persistente, revisão, entrega manual, 
   await publicPage.getByLabel("Cidade", { exact: true }).fill("São Paulo");
   await publicPage.getByLabel("UF", { exact: true }).fill("SP");
   await publicPage
-    .getByRole("button", { name: "Registrar solicitação" })
+    .getByRole("button", { name: "Continuar", exact: true })
+    .click();
+  await expect(publicPage.locator("#order-summary")).toContainText(
+    "Praça da Sé",
+  );
+  const whatsappOpened = publicPage.waitForEvent("popup");
+  await publicPage
+    .getByRole("button", { name: "Encaminhar pelo WhatsApp" })
     .click();
   await expect(publicPage.locator("#order-result")).toBeVisible();
+  const whatsappPage = await whatsappOpened;
+  await expect(whatsappPage).toHaveURL(/https:\/\/wa\.me\/5511999998888/);
+  await whatsappPage.close();
   const url = await publicPage
     .getByRole("link", { name: "Abrir WhatsApp", exact: true })
     .getAttribute("href");
@@ -170,7 +190,10 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
   const admin = "http://localhost:8798",
     headers = { Origin: admin };
   const settings = await (await request.get(`${admin}/api/settings`)).json();
-  await request.put(`${admin}/api/settings`,{headers,data:{...settings,whatsapp:"5511999998888"}});
+  await request.put(`${admin}/api/settings`, {
+    headers,
+    data: { ...settings, whatsapp: "5511999998888" },
+  });
   const c = await (
     await request.post(`${admin}/api/categories`, {
       headers,
@@ -206,31 +229,37 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
     }
   });
   await page.goto("http://localhost:8797");
+  await page.getByRole("button", { name: /Abrir carrinho/ }).click();
   await expect(page.locator("#cart-total")).toHaveText(
     "Seu carrinho está vazio.",
   );
+  await page.getByRole("button", { name: "Fechar carrinho" }).click();
   await page
     .getByRole("button", { name: "Adicionar Mesmo doce · Avulso", exact: true })
     .click();
   await page
     .getByRole("button", { name: "Adicionar Mesmo doce · Caixa", exact: true })
     .click();
+  await page.getByRole("button", { name: /Abrir carrinho/ }).click();
   await page.getByLabel("Quantidade de Mesmo doce · Avulso").fill("2");
   await page.getByLabel("Quantidade de Mesmo doce · Avulso").press("Tab");
   await page.reload();
+  await page.getByRole("button", { name: /Abrir carrinho/ }).click();
   await expect(page.locator("#cart-items > div")).toHaveCount(2);
   await expect(page.locator("#cart-total")).toContainText("33,00");
   await page.route("**/api/quote", (route) => route.abort());
   await page
-    .getByRole("button", { name: "Revisar carrinho", exact: true })
+    .getByRole("button", { name: "Confirmar carrinho", exact: true })
     .click();
   await expect(page.locator("#cart-status")).toContainText("Falha de conexão");
   await page.unroute("**/api/quote");
   await page
-    .getByRole("button", { name: "Revisar carrinho", exact: true })
+    .getByRole("button", { name: "Confirmar carrinho", exact: true })
     .click();
   await page.getByLabel("Seu nome", { exact: true }).fill("Resposta perdida");
   await page.getByLabel("Seu celular com DDD").fill("11977776666");
+  await page.getByRole("button", { name: "Continuar", exact: true }).click();
+  await page.getByRole("button", { name: "Continuar", exact: true }).click();
   await expect(page.locator("#delivery-address")).toBeHidden();
   let lose = true;
   let releaseSubmission!: () => void;
@@ -245,7 +274,7 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
       await route.abort();
     } else await route.continue();
   });
-  await page.getByRole("button", { name: "Registrar solicitação" }).click();
+  await page.getByRole("button", { name: "Encaminhar pelo WhatsApp" }).click();
   await expect(page.locator("#cart-status")).toContainText(
     "Registrando solicitação",
   );
@@ -258,7 +287,7 @@ test("retirada recupera resposta perdida sem duplicar; carrinho inválido e falh
   releaseSubmission();
   await expect(page.locator("#cart-status")).toContainText("Falha de conexão");
   await expect(page.locator("#order-result")).toBeHidden();
-  await page.getByRole("button", { name: "Registrar solicitação" }).click();
+  await page.getByRole("button", { name: "Encaminhar pelo WhatsApp" }).click();
   await expect(page.locator("#order-result")).toBeVisible();
   expect(
     decodeURIComponent(
@@ -304,9 +333,13 @@ test("ViaCEP preenche campos e resposta atrasada não sobrescreve o CEP atual", 
       exact: true,
     })
     .click();
+  await page.getByRole("button", { name: /Abrir carrinho/ }).click();
   await page
-    .getByRole("button", { name: "Revisar carrinho", exact: true })
+    .getByRole("button", { name: "Confirmar carrinho", exact: true })
     .click();
+  await page.getByLabel("Seu nome", { exact: true }).fill("Teste CEP");
+  await page.getByLabel("Seu celular com DDD").fill("11988887777");
+  await page.getByRole("button", { name: "Continuar", exact: true }).click();
   await page
     .getByRole("combobox", { name: "Modalidade", exact: true })
     .selectOption("delivery");

@@ -36,7 +36,8 @@ export function replaceCart(items) {
 }
 export function addToCart(product) {
   const existing = cart.find((i) => i.id === product.id);
-  if (existing?.quantity >= 1000 || (!existing && cart.length >= 50)) return;
+  if (existing?.quantity >= 1000 || (!existing && cart.length >= 50))
+    return false;
   replaceCart(
     existing
       ? cart.map((i) =>
@@ -53,4 +54,5 @@ export function addToCart(product) {
           },
         ],
   );
+  return true;
 }

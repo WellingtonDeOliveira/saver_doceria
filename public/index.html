@@ -17,7 +17,29 @@
           ><img src="/assets/logo.jpg" alt="Logo Saver Doceria" /><span
             ><strong id="store-name">Saver</strong><small>DOCERIA</small></span
           ></a
-        ><a href="#cardapio" class="button secondary">Ver cardápio</a>
+        ><button
+          id="open-cart"
+          class="secondary cart-trigger"
+          type="button"
+          aria-haspopup="dialog"
+          aria-label="Abrir carrinho, 0 itens"
+        >
+          <svg
+            width="21"
+            height="21"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <path d="M3 3h2l2.5 12h11L21 7H6" />
+            <circle cx="9" cy="20" r="1" />
+            <circle cx="18" cy="20" r="1" /></svg
+          >Carrinho<span id="cart-count" class="cart-count" aria-hidden="true"
+            >0</span
+          >
+        </button>
       </div>
     </header>
     <section class="hero container">
@@ -49,91 +71,135 @@
       <p id="status" role="status" aria-live="polite">Carregando os doces…</p>
       <button id="reload" class="secondary" hidden>Tentar novamente</button>
       <div id="products" class="catalog-grid"></div>
-      <section id="cart" class="panel stack">
-        <h2>Seu carrinho</h2>
-        <div id="cart-items" class="stack"></div>
-        <p id="cart-total"></p>
-        <p id="cart-status" role="status" aria-live="polite"></p>
-        <button id="review-cart" type="button">Revisar carrinho</button>
-        <button id="accept-changes" type="button" hidden>
-          Aceitar alterações do carrinho
-        </button>
-        <form id="checkout" class="stack" hidden>
-          <h3>Solicitar pedido</h3>
-          <p>
-            Sem reserva de estoque. A loja confirma a disponibilidade no
-            atendimento.
-          </p>
-          <label
-            >Seu nome<input
-              name="name"
-              autocomplete="name"
-              required
-              maxlength="120"
-          /></label>
-          <label
-            >Seu celular com DDD<input
-              name="phone"
-              type="tel"
-              autocomplete="tel"
-              required
-              maxlength="30"
-          /></label>
-          <label
-            >Modalidade<select name="mode">
-              <option value="pickup">Retirada</option>
-              <option value="delivery">Entrega</option>
-            </select></label
+    </main>
+    <dialog id="cart-dialog" class="shop-dialog" aria-labelledby="cart-title">
+      <section id="cart" class="stack">
+        <div class="dialog-heading">
+          <div>
+            <span class="eyebrow">Um carinho em cada doce</span>
+            <h2 id="cart-title" tabindex="-1">Seu carrinho</h2>
+          </div>
+          <button
+            type="button"
+            id="close-cart"
+            class="secondary icon-button"
+            aria-label="Fechar carrinho"
           >
-          <fieldset id="delivery-address" class="stack" disabled hidden>
-            <legend>Endereço de entrega · frete a combinar</legend>
+            ×
+          </button>
+        </div>
+        <ol class="checkout-steps" aria-label="Etapas da solicitação">
+          <li><span>1</span>Carrinho</li>
+          <li><span>2</span>Seus dados</li>
+          <li><span>3</span>Entrega</li>
+          <li><span>4</span>Revisão</li>
+        </ol>
+        <div id="cart-selection" class="stack">
+          <div id="cart-items" class="stack"></div>
+          <p id="cart-total"></p>
+          <button id="review-cart" type="button">Confirmar carrinho</button>
+          <button id="accept-changes" type="button" hidden>
+            Aceitar alterações do carrinho
+          </button>
+        </div>
+        <p id="cart-status" role="status" aria-live="polite"></p>
+        <form id="checkout" class="stack" novalidate hidden>
+          <section id="customer-step" class="stack">
+            <h3>Vamos nos conhecer?</h3>
+            <p>Informe seus dados para continuar o atendimento.</p>
             <label
-              >CEP<input
-                name="cep"
-                inputmode="numeric"
-                autocomplete="postal-code"
-                maxlength="9"
+              >Seu nome<input
+                name="name"
+                autocomplete="name"
                 required
+                maxlength="120"
             /></label>
-            <button id="lookup-cep" type="button" class="secondary">
-              Buscar CEP
+            <label
+              >Seu celular com DDD<input
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                required
+                maxlength="30"
+            /></label>
+          </section>
+          <section id="address-step" class="stack" hidden>
+            <h3>Como seus doces chegam até você?</h3>
+            <label
+              >Modalidade<select name="mode">
+                <option value="pickup">Retirada</option>
+                <option value="delivery">Entrega</option>
+              </select></label
+            >
+            <fieldset id="delivery-address" class="stack" disabled hidden>
+              <legend>Endereço de entrega · frete a combinar</legend>
+              <label
+                >CEP<input
+                  name="cep"
+                  inputmode="numeric"
+                  autocomplete="postal-code"
+                  maxlength="9"
+                  required
+              /></label>
+              <button id="lookup-cep" type="button" class="secondary">
+                Buscar CEP
+              </button>
+              <p id="cep-status" role="status"></p>
+              <label
+                >Rua<input
+                  name="street"
+                  autocomplete="address-line1"
+                  required
+                  maxlength="120"
+              /></label>
+              <label
+                >Número ou s/n<input name="number" required maxlength="30"
+              /></label>
+              <label
+                >Complemento<input
+                  name="complement"
+                  autocomplete="address-line2"
+                  maxlength="120"
+              /></label>
+              <label
+                >Bairro<input name="district" required maxlength="120"
+              /></label>
+              <label
+                >Cidade<input
+                  name="city"
+                  autocomplete="address-level2"
+                  required
+                  maxlength="120"
+              /></label>
+              <label
+                >UF<input
+                  name="state"
+                  autocomplete="address-level1"
+                  required
+                  maxlength="2"
+              /></label>
+            </fieldset>
+            <p id="pickup-note" class="checkout-note">
+              Você combina o local e o horário da retirada com a loja pelo
+              WhatsApp.
+            </p>
+          </section>
+          <section id="review-step" class="stack" hidden>
+            <h3>Está tudo do seu jeitinho?</h3>
+            <div id="order-summary" class="stack"></div>
+            <p class="checkout-note">
+              Frete de entrega a combinar. Esta solicitação não reserva estoque;
+              a disponibilidade e a confirmação são combinadas pelo WhatsApp.
+            </p>
+          </section>
+          <div class="checkout-actions">
+            <button id="previous-step" class="secondary" type="button">
+              Voltar</button
+            ><button id="next-step" type="button">Continuar</button
+            ><button id="submit-order" type="submit" hidden>
+              Encaminhar pelo WhatsApp
             </button>
-            <p id="cep-status" role="status"></p>
-            <label
-              >Rua<input
-                name="street"
-                autocomplete="address-line1"
-                required
-                maxlength="120"
-            /></label>
-            <label
-              >Número ou s/n<input name="number" required maxlength="30"
-            /></label>
-            <label
-              >Complemento<input
-                name="complement"
-                autocomplete="address-line2"
-                maxlength="120"
-            /></label>
-            <label
-              >Bairro<input name="district" required maxlength="120"
-            /></label>
-            <label
-              >Cidade<input
-                name="city"
-                autocomplete="address-level2"
-                required
-                maxlength="120"
-            /></label>
-            <label
-              >UF<input
-                name="state"
-                autocomplete="address-level1"
-                required
-                maxlength="2"
-            /></label>
-          </fieldset>
-          <button id="submit-order" type="submit">Registrar solicitação</button>
+          </div>
         </form>
         <div id="order-result" hidden>
           <p id="order-reference"></p>
@@ -147,7 +213,32 @@
           >
         </div>
       </section>
-    </main>
+    </dialog>
+    <dialog
+      id="product-dialog"
+      class="shop-dialog product-dialog"
+      aria-labelledby="product-title"
+    >
+      <div class="dialog-heading">
+        <span class="eyebrow">Feito com carinho</span
+        ><button
+          id="close-product"
+          type="button"
+          class="secondary icon-button"
+          aria-label="Fechar detalhes"
+        >
+          ×
+        </button>
+      </div>
+      <div id="product-details" class="stack"></div>
+      <p id="product-feedback" role="status" aria-live="polite"></p>
+      <div class="detail-actions">
+        <button id="detail-add" type="button">Adicionar ao carrinho</button
+        ><button id="detail-cart" class="secondary" type="button">
+          Ver carrinho
+        </button>
+      </div>
+    </dialog>
     <footer>
       <div class="container footer-inner">
         <span class="brand-title">Saver Doceria</span
